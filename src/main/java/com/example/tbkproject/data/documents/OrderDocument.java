@@ -24,7 +24,7 @@ public class OrderDocument {
     private String userId;
     private List<OrderItem> items;
     @Indexed(unique = true)
-    private String orderNumber;
+    private int orderNumber;
     private PaymentMethod paymentMethod;
     private OrderStatus status;
     private double totalPrice;
@@ -34,7 +34,7 @@ public class OrderDocument {
     private LocalDateTime orderTime;
     private String estimatedTime;
 
-    public OrderDocument(String userId, List<OrderItem> items, String orderNumber, PaymentMethod paymentMethod,
+    public OrderDocument(String userId, List<OrderItem> items, int orderNumber, PaymentMethod paymentMethod,
                          OrderStatus status, double totalPrice, String tableNumber, String deliveryOption, String deliveryAddress,
                          LocalDateTime orderTime, String estimatedTime) {
         this.userId = userId;

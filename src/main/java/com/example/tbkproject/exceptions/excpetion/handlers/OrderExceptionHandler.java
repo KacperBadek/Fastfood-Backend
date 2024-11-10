@@ -1,4 +1,18 @@
 package com.example.tbkproject.exceptions.excpetion.handlers;
 
-public class OrderExceptionHandler {
+import com.example.tbkproject.Controller;
+import com.example.tbkproject.exceptions.exception.order.OrderNotFoundException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+
+@ControllerAdvice(assignableTypes = Controller.class)
+public class OrderExceptionHandler extends ResponseEntityExceptionHandler {
+
+    @ExceptionHandler(OrderNotFoundException.class)
+    public ResponseEntity<String> handleOrderNotFoundException(Exception ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
 }
