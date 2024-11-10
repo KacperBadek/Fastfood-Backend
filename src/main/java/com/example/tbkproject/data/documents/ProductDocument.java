@@ -9,6 +9,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.List;
+
 @Document
 @Getter
 @Setter
@@ -19,9 +21,15 @@ public class ProductDocument {
     private String id;
     @Indexed(unique = true)
     private String name;
+    private String description;
+    private String image;
     private ProductType type;
     private double price;
     private boolean available;
+    private List<String> ingredients;
+    private List<String> allergens;
+    private int calories;
+    private List<AddOn> addOns;
 
     public ProductDocument(String name, ProductType type, double price, boolean available) {
         this.name = name;
@@ -29,4 +37,19 @@ public class ProductDocument {
         this.price = price;
         this.available = available;
     }
+
+    public ProductDocument(String name, String description, String image, ProductType type, double price, boolean available,
+                           List<String> ingredients, List<String> allergens, int calories, List<AddOn> addOns) {
+        this.name = name;
+        this.description = description;
+        this.image = image;
+        this.type = type;
+        this.price = price;
+        this.available = available;
+        this.ingredients = ingredients;
+        this.allergens = allergens;
+        this.calories = calories;
+        this.addOns = addOns;
+    }
 }
+

@@ -1,7 +1,10 @@
 package com.example.tbkproject.data;
 
 public enum ProductType {
-    FOOD,
+    BURGER,
     DRINK,
-    DESERT
+    DESERT,
+    SNACK,
+    MEAL,
+    SALAD
 }
