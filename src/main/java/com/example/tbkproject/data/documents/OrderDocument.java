@@ -50,5 +50,17 @@ public class OrderDocument {
         this.estimatedTime = estimatedTime;
     }
 
+    public OrderDocument(String userId, List<OrderItem> items, PaymentMethod paymentMethod, double totalPrice, String tableNumber, String deliveryOption,
+                         String deliveryAddress, LocalDateTime orderTime) {
+        this.userId = userId;
+        this.items = items;
+        this.paymentMethod = paymentMethod;
+        this.totalPrice = totalPrice;
+        this.tableNumber = tableNumber;
+        this.deliveryOption = deliveryOption;
+        this.deliveryAddress = deliveryAddress;
+        this.orderTime = orderTime;
+    }
+
 }
 

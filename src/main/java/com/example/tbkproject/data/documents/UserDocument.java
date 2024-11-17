@@ -30,4 +30,9 @@ public class UserDocument {
         this.isAdmin = isAdmin;
     }
 
+    public UserDocument(String email, String password) {
+        this.email = email;
+        this.password = password;
+    }
+
 }

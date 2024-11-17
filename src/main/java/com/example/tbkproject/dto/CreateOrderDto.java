@@ -1,6 +1,5 @@
 package com.example.tbkproject.dto;
 
-import com.example.tbkproject.data.OrderStatus;
 import com.example.tbkproject.data.PaymentMethod;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,34 +11,27 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-public class OrderDto {
+public class CreateOrderDto {
 
     private String userId;
     private List<OrderItemDto> items;
-    private int orderNumber;
     private PaymentMethod paymentMethod;
-    private OrderStatus status;
     private double totalPrice;
     private String tableNumber;
     private String deliveryOption;
     private String deliveryAddress;
     private LocalDateTime orderTime;
-    private String estimatedTime;
 
-    public OrderDto(String userId, List<OrderItemDto> items,
-                    int orderNumber, PaymentMethod paymentMethod, OrderStatus status,
-                    double totalPrice, String tableNumber, String deliveryOption, String deliveryAddress, LocalDateTime orderTime, String estimatedTime) {
+    public CreateOrderDto(String userId, List<OrderItemDto> items, PaymentMethod paymentMethod,
+                          double totalPrice, String tableNumber, String deliveryOption, String deliveryAddress, LocalDateTime orderTime) {
 
         this.userId = userId;
         this.items = items;
-        this.orderNumber = orderNumber;
         this.paymentMethod = paymentMethod;
-        this.status = status;
         this.totalPrice = totalPrice;
         this.tableNumber = tableNumber;
         this.deliveryOption = deliveryOption;
         this.deliveryAddress = deliveryAddress;
         this.orderTime = orderTime;
-        this.estimatedTime = estimatedTime;
     }
 }

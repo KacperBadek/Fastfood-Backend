@@ -1,6 +1,6 @@
 package com.example.tbkproject.exceptions.excpetion.handlers;
 
-import com.example.tbkproject.Controller;
+import com.example.tbkproject.controllers.ProductsController;
 import com.example.tbkproject.exceptions.exception.product.ProductAlreadyExistsException;
 import com.example.tbkproject.exceptions.exception.product.ProductNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-@ControllerAdvice(assignableTypes = Controller.class)
+@ControllerAdvice(assignableTypes = ProductsController.class)
 public class ProductExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(ProductNotFoundException.class)

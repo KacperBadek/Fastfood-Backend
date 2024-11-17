@@ -31,13 +31,6 @@ public class ProductDocument {
     private int calories;
     private List<AddOn> addOns;
 
-    public ProductDocument(String name, ProductType type, double price, boolean available) {
-        this.name = name;
-        this.type = type;
-        this.price = price;
-        this.available = available;
-    }
-
     public ProductDocument(String name, String description, String image, ProductType type, double price, boolean available,
                            List<String> ingredients, List<String> allergens, int calories, List<AddOn> addOns) {
         this.name = name;
