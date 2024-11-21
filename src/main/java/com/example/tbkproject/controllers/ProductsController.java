@@ -1,8 +1,8 @@
 package com.example.tbkproject.controllers;
 
-import com.example.tbkproject.dto.ProductDto;
-import com.example.tbkproject.exceptions.exception.product.ProductAlreadyExistsException;
-import com.example.tbkproject.exceptions.exception.product.ProductNotFoundException;
+import com.example.tbkproject.dto.AddOnDto;
+import com.example.tbkproject.dto.product.dtos.ProductDetailsDto;
+import com.example.tbkproject.dto.product.dtos.ProductDto;
 import com.example.tbkproject.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,6 +18,22 @@ import java.util.List;
 public class ProductsController {
 
     private final ProductService productService;
+
+    @GetMapping("/{id}/customizastions")
+    public ResponseEntity<List<AddOnDto>> getProductAddons(@PathVariable String id) {
+        return ResponseEntity.ok(productService.getProductAddOns(id));
+    }
+
+    @PutMapping("/{id}/customizastions")
+    public ResponseEntity<List<AddOnDto>> setProductAddons(@PathVariable String id, @RequestBody List<AddOnDto> addons) {
+        productService.setProductAddOns(id, addons);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @GetMapping("/{id}/details")
+    public ResponseEntity<ProductDetailsDto> getProductDetails(@PathVariable String id) {
+        return ResponseEntity.ok(productService.getProductDetails(id));
+    }
 
     @GetMapping("/all")
     public ResponseEntity<List<ProductDto>> getAllProducts() {

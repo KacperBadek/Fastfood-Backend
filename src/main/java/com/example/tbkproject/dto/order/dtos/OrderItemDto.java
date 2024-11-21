@@ -1,4 +1,4 @@
-package com.example.tbkproject.dto;
+package com.example.tbkproject.dto.order.dtos;
 
 import com.example.tbkproject.data.documents.AddOn;
 import lombok.Getter;

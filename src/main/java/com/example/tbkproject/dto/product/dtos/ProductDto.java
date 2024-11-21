@@ -1,6 +1,6 @@
-package com.example.tbkproject.dto;
+package com.example.tbkproject.dto.product.dtos;
 
-import com.example.tbkproject.data.ProductType;
+import com.example.tbkproject.data.enums.ProductType;
 import com.example.tbkproject.data.documents.AddOn;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

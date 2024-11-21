@@ -1,7 +1,7 @@
 package com.example.tbkproject.mappers;
 
 import com.example.tbkproject.data.documents.ProductDocument;
-import com.example.tbkproject.dto.ProductDto;
+import com.example.tbkproject.dto.product.dtos.ProductDto;
 
 public class ProductMapper {
     public static ProductDto toDto(ProductDocument productDocument) {

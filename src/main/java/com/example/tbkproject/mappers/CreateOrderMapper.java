@@ -2,9 +2,7 @@ package com.example.tbkproject.mappers;
 
 import com.example.tbkproject.data.documents.OrderDocument;
 import com.example.tbkproject.data.documents.OrderItem;
-import com.example.tbkproject.dto.CreateOrderDto;
-import com.example.tbkproject.dto.OrderDto;
-import com.example.tbkproject.dto.OrderItemDto;
+import com.example.tbkproject.dto.order.dtos.CreateOrderDto;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,7 +24,6 @@ public class CreateOrderMapper {
                 orderItems,
                 createOrderDto.getPaymentMethod(),
                 createOrderDto.getTotalPrice(),
-                createOrderDto.getTableNumber(),
                 createOrderDto.getDeliveryOption(),
                 createOrderDto.getDeliveryAddress(),
                 createOrderDto.getOrderTime()

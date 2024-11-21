@@ -10,6 +10,7 @@ import java.util.Optional;
 public interface OrderRepository extends MongoRepository<OrderDocument, String> {
 
     Optional<OrderDocument> findByOrderNumber(int orderNumber);
+
     Optional<OrderDocument> findFirstByOrderByOrderNumberDesc();
 
 

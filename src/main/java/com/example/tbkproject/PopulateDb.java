@@ -1,9 +1,12 @@
 package com.example.tbkproject;
 
-import com.example.tbkproject.data.ProductType;
+import com.example.tbkproject.data.enums.ProductType;
 import com.example.tbkproject.data.documents.AddOn;
 import com.example.tbkproject.data.documents.ProductDocument;
+import com.example.tbkproject.data.documents.UserDocument;
 import com.example.tbkproject.data.repositories.ProductRepository;
+import com.example.tbkproject.service.UserService;
+import com.mongodb.client.MongoClient;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,11 +20,13 @@ import java.util.List;
 public class PopulateDb {
 
     private final ProductRepository productRepository;
+    private final UserService userService;
 
     @Bean
-    CommandLineRunner initMongoDb(MongoTemplate mongoTemplate) {
+    CommandLineRunner initMongoDb(MongoTemplate mongoTemplate, MongoClient mongo) {
 
         mongoTemplate.getDb().getCollection("productDocument").drop();
+        mongoTemplate.getDb().getCollection("userDocument").drop();
 
         return args -> {
             ProductDocument product1 = new ProductDocument("Cheeseburger", "Burger z serem", "", ProductType.BURGER, 6.99,
@@ -66,8 +71,12 @@ public class PopulateDb {
                     List.of(new AddOn("Extra Sauce", 1.0), new AddOn("Double Fries", 2.5))
             );
 
+            UserDocument admin = new UserDocument("Admin", "admin@gmail.com", "123", true);
+
+
             List<ProductDocument> products = List.of(product1);
             productRepository.saveAll(products);
+            userService.createUser(admin);
         };
     }
 

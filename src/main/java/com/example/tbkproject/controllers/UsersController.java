@@ -1,10 +1,8 @@
 package com.example.tbkproject.controllers;
 
 import com.example.tbkproject.dto.UserDto;
-import com.example.tbkproject.exceptions.exception.user.UserNotFoundException;
 import com.example.tbkproject.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

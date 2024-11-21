@@ -1,4 +1,4 @@
-package com.example.tbkproject.data;
+package com.example.tbkproject.data.enums;
 
 public enum ProductType {
     BURGER,

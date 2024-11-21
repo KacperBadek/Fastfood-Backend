@@ -2,8 +2,8 @@ package com.example.tbkproject.mappers;
 
 import com.example.tbkproject.data.documents.OrderDocument;
 import com.example.tbkproject.data.documents.OrderItem;
-import com.example.tbkproject.dto.OrderDto;
-import com.example.tbkproject.dto.OrderItemDto;
+import com.example.tbkproject.dto.order.dtos.OrderDto;
+import com.example.tbkproject.dto.order.dtos.OrderItemDto;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,7 +28,6 @@ public class OrderMapper {
                 orderDocument.getPaymentMethod(),
                 orderDocument.getStatus(),
                 orderDocument.getTotalPrice(),
-                orderDocument.getTableNumber(),
                 orderDocument.getDeliveryOption(),
                 orderDocument.getDeliveryAddress(),
                 orderDocument.getOrderTime(),
@@ -53,7 +52,6 @@ public class OrderMapper {
                 orderDto.getPaymentMethod(),
                 orderDto.getStatus(),
                 orderDto.getTotalPrice(),
-                orderDto.getTableNumber(),
                 orderDto.getDeliveryOption(),
                 orderDto.getDeliveryAddress(),
                 orderDto.getOrderTime(),

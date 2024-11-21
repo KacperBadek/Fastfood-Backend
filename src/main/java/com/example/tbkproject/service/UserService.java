@@ -27,8 +27,15 @@ public class UserService {
         return userRepository.findByEmail(email).map(UserMapper::toDto).orElseThrow(() -> new UserNotFoundException(email));
     }
 
-    public void createUser(UserDocument userDocument) {
-        userRepository.save(userDocument);
+    public void createUser(UserDocument user) {
+        encodeUserPassword(user);
+        userRepository.save(user);
+    }
+
+    public void encodeUserPassword(UserDocument userDocument) {
+        String unHashedPassword = userDocument.getPassword();
+        String hashedPassword = passwordEncoder.encode(unHashedPassword);
+        userDocument.setPassword(hashedPassword);
     }
 
     public void loginUser(String email, String rawPassword) {

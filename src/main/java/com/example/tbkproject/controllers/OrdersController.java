@@ -1,8 +1,9 @@
 package com.example.tbkproject.controllers;
 
-import com.example.tbkproject.dto.CreateOrderDto;
-import com.example.tbkproject.dto.OrderDto;
-import com.example.tbkproject.exceptions.exception.order.OrderNotFoundException;
+import com.example.tbkproject.data.enums.DeliveryOption;
+import com.example.tbkproject.dto.DeliveryOptionDto;
+import com.example.tbkproject.dto.order.dtos.CreateOrderDto;
+import com.example.tbkproject.dto.order.dtos.OrderDto;
 import com.example.tbkproject.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,26 +19,64 @@ public class OrdersController {
 
     private final OrderService orderService;
 
+    @GetMapping("/{id}/delivery-options")
+    public ResponseEntity<DeliveryOptionDto> getDeliveryOptionFromOrder(@PathVariable String id) {
+        return ResponseEntity.ok(orderService.getDeliveryOptionFromOrder(id));
+    }
+
+    @PutMapping("/{id}/delivery-options")
+    public ResponseEntity<Void> setDeliveryOptionForOrder(@PathVariable String id, DeliveryOptionDto deliveryOption) {
+        orderService.setDeliveryOptionForOrder(id, deliveryOption);
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @GetMapping("/{id}/summary")
+    public ResponseEntity<Void> getOrderSummary(@PathVariable String id) {
+        return null;
+    }
+
+//    @PostMapping("/{id}/summary")
+//    public ResponseEntity<Void> setOrderSummary(@PathVariable String id) {
+//        return null;
+//    }
+
+    @PutMapping("/{id}/cancel")
+    public ResponseEntity<Void> cancelOrder(@PathVariable String id) {
+        orderService.cancelOrder(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @GetMapping("/{id}/confirm")
+    public ResponseEntity<Void> getOrderConfirmation(@PathVariable String id) {
+        return null;
+    }
+
+    @GetMapping("/{id}/estimated-time")
+    public ResponseEntity<String> getOrderEstimatedTime(@PathVariable String id) {
+        return ResponseEntity.ok(orderService.getOrderEstimatedTime(id));
+    }
+
     @GetMapping("/all")
     public ResponseEntity<List<OrderDto>> getAllOrders() {
         return ResponseEntity.ok(orderService.getAllOrders());
     }
 
-    @GetMapping("/{orderNumber}")
-    public ResponseEntity<OrderDto> getOrderByOrderNumber(@PathVariable int orderNumber) {
-        return ResponseEntity.ok(orderService.getOrderByOrderNumber(orderNumber));
+    @GetMapping("/{id}")
+    public ResponseEntity<OrderDto> getOrderByOrderNumber(@PathVariable String id) {
+        return ResponseEntity.ok(orderService.getOrderByOrderNumber(id));
     }
 
-    @PutMapping("/add")
+    @PostMapping("/add")
     public ResponseEntity<CreateOrderDto> createOrder(CreateOrderDto createOrderDto) {
         orderService.createOrder(createOrderDto);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @DeleteMapping("/delete/{orderNumber}")
-    public ResponseEntity<OrderDto> deleteOrder(@PathVariable int orderNumber) {
-        orderService.deleteOrder(orderNumber);
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<OrderDto> deleteOrder(@PathVariable String id) {
+        orderService.deleteOrder(id);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }

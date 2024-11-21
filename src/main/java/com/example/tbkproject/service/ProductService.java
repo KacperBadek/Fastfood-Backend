@@ -2,9 +2,12 @@ package com.example.tbkproject.service;
 
 import com.example.tbkproject.data.documents.ProductDocument;
 import com.example.tbkproject.data.repositories.ProductRepository;
-import com.example.tbkproject.dto.ProductDto;
+import com.example.tbkproject.dto.AddOnDto;
+import com.example.tbkproject.dto.product.dtos.ProductDetailsDto;
+import com.example.tbkproject.dto.product.dtos.ProductDto;
 import com.example.tbkproject.exceptions.exception.product.ProductAlreadyExistsException;
 import com.example.tbkproject.exceptions.exception.product.ProductNotFoundException;
+import com.example.tbkproject.mappers.AddOnMapper;
 import com.example.tbkproject.mappers.ProductMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -39,6 +42,22 @@ public class ProductService {
     public void deleteProductByName(String name) {
         ProductDocument product = productRepository.findByName(name).orElseThrow(() -> new ProductNotFoundException(name));
         productRepository.delete(product);
+    }
+
+    public ProductDetailsDto getProductDetails(String id) {
+        ProductDocument product = productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException(id));
+        return new ProductDetailsDto(product.getIngredients(), product.getAllergens(), product.getCalories());
+    }
+
+    public List<AddOnDto> getProductAddOns(String id) {
+        ProductDocument product = productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException(id));
+
+        return product.getAddOns().stream().map(AddOnMapper::toDto).toList();
+    }
+
+    public void setProductAddOns(String id, List<AddOnDto> addOns) {
+        ProductDocument product = productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException(id));
+        product.setAddOns(addOns.stream().map(AddOnMapper::toDocument).toList());
     }
 
     public void updateProduct(ProductDto productDto) {
