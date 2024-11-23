@@ -22,7 +22,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -78,8 +77,11 @@ public class OrderService {
     }
 
     private double countTotalPrice(List<OrderItemDto> orderItems) {
-        return orderItems.stream().mapToDouble(OrderItemDto::getPrice).sum();
+        return orderItems.stream()
+                .mapToDouble(item -> item.getPrice() * item.getQuantity())
+                .sum();
     }
+
 
     public void createOrder(CreateOrderDto createOrderDto) {
         OrderDocument order = CreateOrderMapper.toDocument(createOrderDto);
