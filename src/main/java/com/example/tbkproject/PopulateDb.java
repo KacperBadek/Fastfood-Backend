@@ -1,10 +1,12 @@
 package com.example.tbkproject;
 
+import com.example.tbkproject.data.documents.TableDocument;
 import com.example.tbkproject.data.enums.ProductType;
 import com.example.tbkproject.data.documents.AddOn;
 import com.example.tbkproject.data.documents.ProductDocument;
 import com.example.tbkproject.data.documents.UserDocument;
 import com.example.tbkproject.data.repositories.ProductRepository;
+import com.example.tbkproject.data.repositories.TableRepository;
 import com.example.tbkproject.service.UserService;
 import com.mongodb.client.MongoClient;
 import org.springframework.boot.CommandLineRunner;
@@ -20,6 +22,7 @@ import java.util.List;
 public class PopulateDb {
 
     private final ProductRepository productRepository;
+    private final TableRepository tableRepository;
     private final UserService userService;
 
     @Bean
@@ -27,6 +30,7 @@ public class PopulateDb {
 
         mongoTemplate.getDb().getCollection("productDocument").drop();
         mongoTemplate.getDb().getCollection("userDocument").drop();
+        mongoTemplate.getDb().getCollection("tableDocument").drop();
 
         return args -> {
             ProductDocument product1 = new ProductDocument("Cheeseburger", "Burger z serem", "", ProductType.BURGER, 6.99,
@@ -71,11 +75,19 @@ public class PopulateDb {
                     List.of(new AddOn("Extra Sauce", 1.0), new AddOn("Double Fries", 2.5))
             );
 
+            TableDocument table1 = new TableDocument(1);
+            TableDocument table2 = new TableDocument(2);
+            TableDocument table3 = new TableDocument(3);
+            TableDocument table4 = new TableDocument(4);
+            TableDocument table5 = new TableDocument(5);
+
             UserDocument admin = new UserDocument("Admin", "admin@gmail.com", "123", true);
 
 
-            List<ProductDocument> products = List.of(product1);
+            List<ProductDocument> products = List.of(product1, product2, product3, product4, product5, product6);
+            List<TableDocument> tables = List.of(table1, table2, table3, table4, table5);
             productRepository.saveAll(products);
+            tableRepository.saveAll(tables);
             userService.createUser(admin);
         };
     }

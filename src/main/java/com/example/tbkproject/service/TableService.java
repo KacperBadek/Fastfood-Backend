@@ -13,7 +13,7 @@ public class TableService {
     private final TableRepository tableRepository;
 
     public void setOrderOnTable(String tableId, String orderId) {
-        TableDocument table = tableRepository.findById(tableId).orElseThrow(() -> new TableNotFoundException(tableId));
+        TableDocument table = tableRepository.findById(tableId).orElseThrow(TableNotFoundException::new);
 
         table.setOrderId(orderId);
     }

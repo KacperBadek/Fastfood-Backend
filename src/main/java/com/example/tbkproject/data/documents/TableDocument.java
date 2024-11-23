@@ -16,7 +16,7 @@ public class TableDocument {
     private String orderId;
     private int tableNumber;
 
-    TableDocument(int tableNumber) {
+   public TableDocument(int tableNumber) {
         this.tableNumber = tableNumber;
     }
 }
