@@ -7,6 +7,8 @@ import com.example.tbkproject.data.repositories.OrderRepository;
 import com.example.tbkproject.dto.DeliveryOptionDto;
 import com.example.tbkproject.dto.order.dtos.CreateOrderDto;
 import com.example.tbkproject.dto.order.dtos.OrderDto;
+import com.example.tbkproject.dto.order.dtos.OrderItemDto;
+import com.example.tbkproject.exceptions.exception.order.OrderAlreadyPaidForException;
 import com.example.tbkproject.exceptions.exception.order.OrderNotFoundException;
 import com.example.tbkproject.mappers.CreateOrderMapper;
 import com.example.tbkproject.mappers.OrderMapper;
@@ -55,23 +57,24 @@ public class OrderService {
         return estimatedTime.format(formatter);
     }
 
-    public void createOrder(CreateOrderDto createOrderDto) {
-        int orderNumber = generateOrderNumber();
-        OrderDocument orderDocument = CreateOrderMapper.toDocument(createOrderDto);
-        orderDocument.setOrderNumber(orderNumber);
-        orderDocument.setStatus(OrderStatus.PENDING);
-        orderDocument.setEstimatedTime(countEstimatedTime(createOrderDto.getOrderTime(), createOrderDto.getDeliveryOption()));
+    private double countTotalPrice(List<OrderItemDto> orderItems) {
+        return orderItems.stream().mapToDouble(OrderItemDto::getPrice).sum();
+    }
 
-        orderRepository.save(orderDocument);
+    public void createOrder(CreateOrderDto createOrderDto) {
+        OrderDocument order = CreateOrderMapper.toDocument(createOrderDto);
+
+        order.setOrderNumber(generateOrderNumber());
+        order.setTotalPrice(countTotalPrice(createOrderDto.getItems()));
+        order.setStatus(OrderStatus.PENDING);
+        order.setEstimatedTime(countEstimatedTime(createOrderDto.getOrderTime(), createOrderDto.getDeliveryOption()));
+
+        orderRepository.save(order);
     }
 
     public void deleteOrder(String id) {
         OrderDocument order = orderRepository.findById(id).orElseThrow(() -> new OrderNotFoundException(id));
         orderRepository.delete(order);
-    }
-
-    public void changeOrderStatus(String id) {
-
     }
 
     public DeliveryOptionDto getDeliveryOptionFromOrder(String id) {
@@ -91,7 +94,12 @@ public class OrderService {
 
     public void cancelOrder(String id) {
         OrderDocument order = orderRepository.findById(id).orElseThrow(() -> new OrderNotFoundException(id));
-        order.setStatus(OrderStatus.CANCELLED);
+
+        if (order.getStatus() == OrderStatus.PENDING) {
+            order.setStatus(OrderStatus.CANCELLED);
+        } else {
+            throw new OrderAlreadyPaidForException(id);
+        }
     }
 
 }

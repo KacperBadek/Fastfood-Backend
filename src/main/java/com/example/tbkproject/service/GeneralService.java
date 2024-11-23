@@ -1,11 +1,15 @@
 package com.example.tbkproject.service;
 
+import com.example.tbkproject.data.documents.OrderDocument;
 import com.example.tbkproject.data.documents.PaymentDocument;
 import com.example.tbkproject.data.enums.ProductType;
+import com.example.tbkproject.data.repositories.OrderRepository;
 import com.example.tbkproject.data.repositories.PaymentRepository;
 import com.example.tbkproject.dto.MenusDto;
 import com.example.tbkproject.dto.PaymentDto;
 import com.example.tbkproject.dto.product.dtos.ProductDto;
+import com.example.tbkproject.exceptions.exception.general.TotalPriceMismatchException;
+import com.example.tbkproject.exceptions.exception.order.OrderNotFoundException;
 import com.example.tbkproject.mappers.PaymentMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,6 +23,7 @@ public class GeneralService {
 
     private final ProductService productService;
     private final PaymentRepository paymentRepository;
+    private final OrderRepository orderRepository;
 
     public MenusDto getMenus() {
         List<ProductDto> products = productService.getAllProducts();
@@ -32,8 +37,19 @@ public class GeneralService {
     }
 
     public void createOrderPayment(PaymentDto dto) {
-        PaymentDocument paymentDocument = new PaymentDocument(dto.getOrderId(), dto.getPaymentMethod(), dto.getTotalPrice());
-        paymentRepository.save(paymentDocument);
+        OrderDocument order = orderRepository.findById(dto.getOrderId()).orElseThrow(() -> new OrderNotFoundException(dto.getOrderId()));
+
+        if (compareTotalPrice(dto.getTotalPrice(), order.getTotalPrice())) {
+            PaymentDocument paymentDocument = new PaymentDocument(dto.getOrderId(), dto.getPaymentMethod(), dto.getTotalPrice());
+            paymentRepository.save(paymentDocument);
+        } else {
+            throw new TotalPriceMismatchException();
+        }
+
+    }
+
+    private boolean compareTotalPrice(double paymentPrice, double orderPrice) {
+        return paymentPrice == orderPrice;
     }
 
 }
