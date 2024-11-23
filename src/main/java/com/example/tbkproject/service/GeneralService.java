@@ -6,6 +6,7 @@ import com.example.tbkproject.data.repositories.PaymentRepository;
 import com.example.tbkproject.dto.MenusDto;
 import com.example.tbkproject.dto.PaymentDto;
 import com.example.tbkproject.dto.product.dtos.ProductDto;
+import com.example.tbkproject.mappers.PaymentMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +25,10 @@ public class GeneralService {
         List<ProductType> productTypes = Arrays.asList(ProductType.values());
 
         return new MenusDto(products, productTypes);
+    }
+
+    public List<PaymentDto> getAllPayments() {
+        return paymentRepository.findAll().stream().map(PaymentMapper::toDto).toList();
     }
 
     public void createOrderPayment(PaymentDto dto) {
