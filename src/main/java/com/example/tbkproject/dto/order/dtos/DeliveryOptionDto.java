@@ -1,4 +1,4 @@
-package com.example.tbkproject.dto;
+package com.example.tbkproject.dto.order.dtos;
 
 import com.example.tbkproject.data.enums.DeliveryOption;
 import lombok.AllArgsConstructor;

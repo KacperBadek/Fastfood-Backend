@@ -20,9 +20,8 @@ public class CreateOrderMapper {
                 .collect(Collectors.toList());
 
         return new OrderDocument(
-                createOrderDto.getUserId(),
+                createOrderDto.getSessionId(),
                 orderItems,
-                createOrderDto.getPaymentMethod(),
                 createOrderDto.getTotalPrice(),
                 createOrderDto.getDeliveryOption(),
                 createOrderDto.getDeliveryAddress(),

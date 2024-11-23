@@ -1,9 +1,6 @@
 package com.example.tbkproject.controllers;
 
-import com.example.tbkproject.data.enums.DeliveryOption;
-import com.example.tbkproject.dto.DeliveryOptionDto;
-import com.example.tbkproject.dto.order.dtos.CreateOrderDto;
-import com.example.tbkproject.dto.order.dtos.OrderDto;
+import com.example.tbkproject.dto.order.dtos.*;
 import com.example.tbkproject.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -32,24 +29,26 @@ public class OrdersController {
     }
 
     @GetMapping("/{id}/summary")
-    public ResponseEntity<Void> getOrderSummary(@PathVariable String id) {
-        return null;
+    public ResponseEntity<OrderSummaryDto> getOrderSummary(@PathVariable String id) {
+        return ResponseEntity.ok(orderService.getOrderSummary(id));
     }
 
-//    @PostMapping("/{id}/summary")
-//    public ResponseEntity<Void> setOrderSummary(@PathVariable String id) {
-//        return null;
-//    }
+    @PutMapping("/{id}/summary")
+    public ResponseEntity<Void> modifyOrderSummary(@PathVariable String id, @RequestBody OrderSummaryEditDto orderSummary) {
+        orderService.modifyOrderSummary(id, orderSummary);
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @GetMapping("/{id}/confirm")
+    public ResponseEntity<OrderConfirmationDto> getOrderConfirmation(@PathVariable String id) {
+        return ResponseEntity.ok(orderService.getOrderConfirmation(id));
+    }
 
     @PutMapping("/{id}/cancel")
     public ResponseEntity<Void> cancelOrder(@PathVariable String id) {
         orderService.cancelOrder(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-    }
-
-    @GetMapping("/{id}/confirm")
-    public ResponseEntity<Void> getOrderConfirmation(@PathVariable String id) {
-        return null;
     }
 
     @GetMapping("/{id}/estimated-time")
@@ -74,7 +73,7 @@ public class OrdersController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}/delete")
     public ResponseEntity<OrderDto> deleteOrder(@PathVariable String id) {
         orderService.deleteOrder(id);
 

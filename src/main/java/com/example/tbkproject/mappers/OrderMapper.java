@@ -22,10 +22,9 @@ public class OrderMapper {
                 .collect(Collectors.toList());
 
         return new OrderDto(
-                orderDocument.getUserId(),
+                orderDocument.getSessionId(),
                 orderItemDtos,
                 orderDocument.getOrderNumber(),
-                orderDocument.getPaymentMethod(),
                 orderDocument.getStatus(),
                 orderDocument.getTotalPrice(),
                 orderDocument.getDeliveryOption(),
@@ -46,10 +45,9 @@ public class OrderMapper {
                 .collect(Collectors.toList());
 
         return new OrderDocument(
-                orderDto.getUserId(),
+                orderDto.getSessionId(),
                 orderItems,
                 orderDto.getOrderNumber(),
-                orderDto.getPaymentMethod(),
                 orderDto.getStatus(),
                 orderDto.getTotalPrice(),
                 orderDto.getDeliveryOption(),

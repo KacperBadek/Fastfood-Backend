@@ -2,7 +2,6 @@ package com.example.tbkproject.data.documents;
 
 import com.example.tbkproject.data.enums.DeliveryOption;
 import com.example.tbkproject.data.enums.OrderStatus;
-import com.example.tbkproject.data.enums.PaymentMethod;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,10 +18,9 @@ import java.util.List;
 public class OrderDocument {
     @Id
     private String id;
-    private String userId;
+    private String sessionId;
     private List<OrderItem> items;
     private int orderNumber;
-    private PaymentMethod paymentMethod;
     private OrderStatus status;
     private double totalPrice;
     private DeliveryOption deliveryOption;
@@ -30,13 +28,12 @@ public class OrderDocument {
     private LocalDateTime orderTime;
     private String estimatedTime;
 
-    public OrderDocument(String userId, List<OrderItem> items, int orderNumber, PaymentMethod paymentMethod,
+    public OrderDocument(String sessionId, List<OrderItem> items, int orderNumber,
                          OrderStatus status, double totalPrice, DeliveryOption deliveryOption, String deliveryAddress,
                          LocalDateTime orderTime, String estimatedTime) {
-        this.userId = userId;
+        this.sessionId = sessionId;
         this.items = items;
         this.orderNumber = orderNumber;
-        this.paymentMethod = paymentMethod;
         this.status = status;
         this.totalPrice = totalPrice;
         this.deliveryOption = deliveryOption;
@@ -45,11 +42,10 @@ public class OrderDocument {
         this.estimatedTime = estimatedTime;
     }
 
-    public OrderDocument(String userId, List<OrderItem> items, PaymentMethod paymentMethod, double totalPrice, DeliveryOption deliveryOption,
+    public OrderDocument(String sessionId, List<OrderItem> items, double totalPrice, DeliveryOption deliveryOption,
                          String deliveryAddress, LocalDateTime orderTime) {
-        this.userId = userId;
+        this.sessionId = sessionId;
         this.items = items;
-        this.paymentMethod = paymentMethod;
         this.totalPrice = totalPrice;
         this.deliveryOption = deliveryOption;
         this.deliveryAddress = deliveryAddress;

@@ -1,7 +1,6 @@
 package com.example.tbkproject.dto.order.dtos;
 
 import com.example.tbkproject.data.enums.DeliveryOption;
-import com.example.tbkproject.data.enums.PaymentMethod;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,20 +13,18 @@ import java.util.List;
 @NoArgsConstructor
 public class CreateOrderDto {
 
-    private String userId;
+    private String sessionId;
     private List<OrderItemDto> items;
-    private PaymentMethod paymentMethod;
     private double totalPrice;
     private DeliveryOption deliveryOption;
     private String deliveryAddress;
     private LocalDateTime orderTime;
 
-    public CreateOrderDto(String userId, List<OrderItemDto> items, PaymentMethod paymentMethod,
+    public CreateOrderDto(String sessionId, List<OrderItemDto> items,
                           double totalPrice, DeliveryOption deliveryOption, String deliveryAddress, LocalDateTime orderTime) {
 
-        this.userId = userId;
+        this.sessionId = sessionId;
         this.items = items;
-        this.paymentMethod = paymentMethod;
         this.totalPrice = totalPrice;
         this.deliveryOption = deliveryOption;
         this.deliveryAddress = deliveryAddress;
