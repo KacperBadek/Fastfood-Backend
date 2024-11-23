@@ -1,6 +1,9 @@
-package com.example.tbkproject.data.documents;
+package com.example.tbkproject.dto;
 
 import com.example.tbkproject.data.enums.PaymentMethod;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,10 +13,14 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderPayment {
+public class PaymentDto {
 
+    @NotBlank
     private String orderId;
+    @NotBlank
     private PaymentMethod paymentMethod;
+    @Positive
+    @Min(0)
     private double totalPrice;
 
 }

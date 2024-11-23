@@ -1,13 +1,13 @@
 package com.example.tbkproject.controllers;
 
 import com.example.tbkproject.dto.MenusDto;
+import com.example.tbkproject.dto.PaymentDto;
 import com.example.tbkproject.service.GeneralService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 @RestController
@@ -23,17 +23,14 @@ public class GeneralController {
     }
 
     @PostMapping("/payments")
-    public ResponseEntity<Void> payments() {
-        return null;
+    public ResponseEntity<Void> payments(@Valid @RequestBody PaymentDto paymentDto) {
+        generalService.createOrderPayment(paymentDto);
+
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PostMapping("/sessions")
     public ResponseEntity<Void> startSession() {
-        return null;
-    }
-
-    @GetMapping("/errors")
-    public ResponseEntity<Void> getErrors() {
         return null;
     }
 
