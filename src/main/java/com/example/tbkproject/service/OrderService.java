@@ -11,10 +11,10 @@ import com.example.tbkproject.dto.order.dtos.*;
 import com.example.tbkproject.exceptions.exception.order.OrderAlreadyPaidForException;
 import com.example.tbkproject.exceptions.exception.order.OrderNotFoundException;
 import com.example.tbkproject.exceptions.exception.table.TableNotFoundException;
-import com.example.tbkproject.mappers.CreateOrderMapper;
-import com.example.tbkproject.mappers.OrderConfirmationMapper;
-import com.example.tbkproject.mappers.OrderMapper;
-import com.example.tbkproject.mappers.OrderSummaryMapper;
+import com.example.tbkproject.mapper.order.mappers.CreateOrderMapper;
+import com.example.tbkproject.mapper.order.mappers.OrderConfirmationMapper;
+import com.example.tbkproject.mapper.order.mappers.OrderMapper;
+import com.example.tbkproject.mapper.order.mappers.OrderSummaryMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

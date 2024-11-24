@@ -1,4 +1,4 @@
-package com.example.tbkproject.mappers;
+package com.example.tbkproject.mapper;
 
 import com.example.tbkproject.data.documents.ProductDocument;
 import com.example.tbkproject.dto.product.dtos.ProductDto;

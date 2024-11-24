@@ -1,4 +1,4 @@
-package com.example.tbkproject.mappers;
+package com.example.tbkproject.mapper.order.mappers;
 
 import com.example.tbkproject.data.documents.OrderDocument;
 import com.example.tbkproject.data.documents.OrderItem;

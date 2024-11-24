@@ -1,13 +1,10 @@
-package com.example.tbkproject.mappers;
+package com.example.tbkproject.mapper.order.mappers;
 
 import com.example.tbkproject.data.documents.OrderDocument;
-import com.example.tbkproject.data.documents.OrderItem;
 import com.example.tbkproject.dto.order.dtos.OrderItemDto;
 import com.example.tbkproject.dto.order.dtos.OrderSummaryDto;
-import com.example.tbkproject.dto.order.dtos.OrderSummaryEditDto;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class OrderSummaryMapper {
 

@@ -7,8 +7,8 @@ import com.example.tbkproject.dto.product.dtos.ProductDetailsDto;
 import com.example.tbkproject.dto.product.dtos.ProductDto;
 import com.example.tbkproject.exceptions.exception.product.ProductAlreadyExistsException;
 import com.example.tbkproject.exceptions.exception.product.ProductNotFoundException;
-import com.example.tbkproject.mappers.AddOnMapper;
-import com.example.tbkproject.mappers.ProductMapper;
+import com.example.tbkproject.mapper.AddOnMapper;
+import com.example.tbkproject.mapper.ProductMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

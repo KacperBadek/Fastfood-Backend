@@ -5,7 +5,7 @@ import com.example.tbkproject.data.repositories.UserRepository;
 import com.example.tbkproject.dto.UserDto;
 import com.example.tbkproject.exceptions.exception.user.InvalidCredentialsException;
 import com.example.tbkproject.exceptions.exception.user.UserNotFoundException;
-import com.example.tbkproject.mappers.UserMapper;
+import com.example.tbkproject.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

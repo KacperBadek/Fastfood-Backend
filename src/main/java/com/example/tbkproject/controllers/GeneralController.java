@@ -1,7 +1,7 @@
 package com.example.tbkproject.controllers;
 
-import com.example.tbkproject.dto.MenusDto;
-import com.example.tbkproject.dto.PaymentDto;
+import com.example.tbkproject.dto.general.dtos.MenusDto;
+import com.example.tbkproject.dto.general.dtos.PaymentDto;
 import com.example.tbkproject.service.GeneralService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

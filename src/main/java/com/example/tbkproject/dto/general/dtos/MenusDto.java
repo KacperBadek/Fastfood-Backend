@@ -1,4 +1,4 @@
-package com.example.tbkproject.dto;
+package com.example.tbkproject.dto.general.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

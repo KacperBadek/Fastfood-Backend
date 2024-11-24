@@ -1,4 +1,4 @@
-package com.example.tbkproject.dto;
+package com.example.tbkproject.dto.general.dtos;
 
 import com.example.tbkproject.data.enums.PaymentMethod;
 import jakarta.validation.constraints.Min;

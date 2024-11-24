@@ -5,12 +5,12 @@ import com.example.tbkproject.data.documents.PaymentDocument;
 import com.example.tbkproject.data.enums.ProductType;
 import com.example.tbkproject.data.repositories.OrderRepository;
 import com.example.tbkproject.data.repositories.PaymentRepository;
-import com.example.tbkproject.dto.MenusDto;
-import com.example.tbkproject.dto.PaymentDto;
+import com.example.tbkproject.dto.general.dtos.MenusDto;
+import com.example.tbkproject.dto.general.dtos.PaymentDto;
 import com.example.tbkproject.dto.product.dtos.ProductDto;
 import com.example.tbkproject.exceptions.exception.general.TotalPriceMismatchException;
 import com.example.tbkproject.exceptions.exception.order.OrderNotFoundException;
-import com.example.tbkproject.mappers.PaymentMapper;
+import com.example.tbkproject.mapper.PaymentMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
