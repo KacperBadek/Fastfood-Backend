@@ -39,20 +39,18 @@ public class GeneralController {
 
     @PostMapping("/sessions/start")
     public ResponseEntity<String> startSession(HttpServletRequest request) {
-        HttpSession session = request.getSession(true);
-        String sessionId = session.getId();
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(sessionId);
+        return ResponseEntity.status(HttpStatus.CREATED).body(generalService.startSession(request));
     }
 
     @PostMapping("/sessions/end")
     public ResponseEntity<Void> endSession(HttpServletRequest request) {
-        HttpSession session = request.getSession(false);
-
-        if (session != null) {
-            session.invalidate();
-        }
+        generalService.endSession(request);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/sessions")
+    public ResponseEntity<String> getSessionInfo(HttpServletRequest request) {
+        return ResponseEntity.ok(generalService.getSessionInfo(request));
     }
 
 }

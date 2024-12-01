@@ -11,6 +11,8 @@ import com.example.tbkproject.dto.product.dtos.ProductDto;
 import com.example.tbkproject.exceptions.exception.general.TotalPriceMismatchException;
 import com.example.tbkproject.exceptions.exception.order.OrderNotFoundException;
 import com.example.tbkproject.mapper.PaymentMapper;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -50,6 +52,30 @@ public class GeneralService {
 
     private boolean compareTotalPrice(double paymentPrice, double orderPrice) {
         return paymentPrice == orderPrice;
+    }
+
+    public String startSession(HttpServletRequest request) {
+        HttpSession session = request.getSession(true);
+        return session.getId();
+    }
+
+    public void endSession(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+
+        if (session != null) {
+            session.invalidate();
+        }
+    }
+
+    public String getSessionInfo(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+
+        if (session != null) {
+            return session.getId();
+        } else {
+            return "Brak istniejącej sesji";
+        }
+
     }
 
 }

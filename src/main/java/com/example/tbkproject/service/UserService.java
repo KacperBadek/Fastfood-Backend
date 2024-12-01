@@ -6,6 +6,7 @@ import com.example.tbkproject.dto.UserDto;
 import com.example.tbkproject.exceptions.exception.user.InvalidCredentialsException;
 import com.example.tbkproject.exceptions.exception.user.UserNotFoundException;
 import com.example.tbkproject.mapper.UserMapper;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final GeneralService generalService;
 
     public List<UserDto> getAllUsers() {
         return userRepository.findAll().stream().map(UserMapper::toDto).toList();
@@ -32,18 +34,25 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public void encodeUserPassword(UserDocument userDocument) {
+    private void encodeUserPassword(UserDocument userDocument) {
         String unHashedPassword = userDocument.getPassword();
         String hashedPassword = passwordEncoder.encode(unHashedPassword);
         userDocument.setPassword(hashedPassword);
     }
 
-    public void loginUser(String email, String rawPassword) {
+    public void loginUser(HttpServletRequest request, String email, String rawPassword) {
         UserDocument user = userRepository.findByEmail(email).orElseThrow(InvalidCredentialsException::new);
 
         if (!passwordEncoder.matches(rawPassword, user.getPassword())) {
             throw new InvalidCredentialsException();
         }
+
+        generalService.endSession(request);
+        generalService.startSession(request);
+    }
+
+    public void logoutUser(HttpServletRequest request) {
+        generalService.endSession(request);
     }
 
 }
