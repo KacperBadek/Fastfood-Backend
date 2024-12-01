@@ -3,6 +3,7 @@ package com.example.tbkproject.mapper.order.mappers;
 import com.example.tbkproject.data.documents.OrderDocument;
 import com.example.tbkproject.dto.order.dtos.OrderItemDto;
 import com.example.tbkproject.dto.order.dtos.OrderSummaryDto;
+import com.example.tbkproject.mapper.AddOnMapper;
 
 import java.util.List;
 
@@ -13,7 +14,7 @@ public class OrderSummaryMapper {
         List<OrderItemDto> items = order.getItems().stream()
                 .map(item -> new OrderItemDto(
                         item.getProductId(),
-                        item.getSelectedAddOns(),
+                        item.getSelectedAddOns().stream().map(AddOnMapper::toDto).toList(),
                         item.getQuantity(),
                         item.getPrice()
                 ))

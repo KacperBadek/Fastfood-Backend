@@ -11,6 +11,7 @@ import com.example.tbkproject.dto.order.dtos.*;
 import com.example.tbkproject.exceptions.exception.order.OrderAlreadyPaidForException;
 import com.example.tbkproject.exceptions.exception.order.OrderNotFoundException;
 import com.example.tbkproject.exceptions.exception.table.TableNotFoundException;
+import com.example.tbkproject.mapper.AddOnMapper;
 import com.example.tbkproject.mapper.order.mappers.CreateOrderMapper;
 import com.example.tbkproject.mapper.order.mappers.OrderConfirmationMapper;
 import com.example.tbkproject.mapper.order.mappers.OrderMapper;
@@ -136,7 +137,7 @@ public class OrderService {
         List<OrderItem> items = dto.getItems().stream()
                 .map(itemDto -> new OrderItem(
                         itemDto.getProductId(),
-                        itemDto.getSelectedAddOns(),
+                        itemDto.getSelectedAddOns().stream().map(AddOnMapper::toDocument).toList(),
                         itemDto.getQuantity(),
                         itemDto.getPrice()
                 ))

@@ -4,6 +4,7 @@ import com.example.tbkproject.data.documents.OrderDocument;
 import com.example.tbkproject.data.documents.OrderItem;
 import com.example.tbkproject.dto.order.dtos.OrderDto;
 import com.example.tbkproject.dto.order.dtos.OrderItemDto;
+import com.example.tbkproject.mapper.AddOnMapper;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -15,7 +16,7 @@ public class OrderMapper {
         List<OrderItemDto> orderItemDtos = orderDocument.getItems().stream()
                 .map(item -> new OrderItemDto(
                         item.getProductId(),
-                        item.getSelectedAddOns(),
+                        item.getSelectedAddOns().stream().map(AddOnMapper::toDto).toList(),
                         item.getQuantity(),
                         item.getPrice()
                 ))
@@ -38,7 +39,7 @@ public class OrderMapper {
         List<OrderItem> orderItems = orderDto.getItems().stream()
                 .map(itemDto -> new OrderItem(
                         itemDto.getProductId(),
-                        itemDto.getSelectedAddOns(),
+                        itemDto.getSelectedAddOns().stream().map(AddOnMapper::toDocument).toList(),
                         itemDto.getQuantity(),
                         itemDto.getPrice()
                 ))

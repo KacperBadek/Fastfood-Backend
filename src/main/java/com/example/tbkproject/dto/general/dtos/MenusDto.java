@@ -1,5 +1,7 @@
 package com.example.tbkproject.dto.general.dtos;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,6 +17,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MenusDto {
+    @NotBlank
     private List<ProductDto> products;
+    @NotBlank
     private List<ProductType> productTypes;
 }

@@ -15,7 +15,7 @@ public class ProductMapper {
                 productDocument.getIngredients(),
                 productDocument.getAllergens(),
                 productDocument.getCalories(),
-                productDocument.getAddOns()
+                productDocument.getAddOns().stream().map(AddOnMapper::toDto).toList()
         );
     }
 
@@ -30,7 +30,7 @@ public class ProductMapper {
                 productDto.getIngredients(),
                 productDto.getAllergens(),
                 productDto.getCalories(),
-                productDto.getAddOns()
+                productDto.getAddOns().stream().map(AddOnMapper::toDocument).toList()
         );
     }
 }
