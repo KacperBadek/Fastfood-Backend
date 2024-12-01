@@ -1,7 +1,6 @@
 package com.example.tbkproject.dto.product.dtos;
 
 import com.example.tbkproject.data.enums.ProductType;
-import com.example.tbkproject.data.documents.AddOn;
 import com.example.tbkproject.dto.AddOnDto;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;

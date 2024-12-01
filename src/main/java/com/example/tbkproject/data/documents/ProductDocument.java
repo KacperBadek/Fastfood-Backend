@@ -1,5 +1,6 @@
 package com.example.tbkproject.data.documents;
 
+import com.example.tbkproject.data.documents.support.AddOn;
 import com.example.tbkproject.data.enums.ProductType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

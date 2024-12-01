@@ -1,6 +1,6 @@
 package com.example.tbkproject.mapper;
 
-import com.example.tbkproject.data.documents.AddOn;
+import com.example.tbkproject.data.documents.support.AddOn;
 import com.example.tbkproject.dto.AddOnDto;
 
 public class AddOnMapper {

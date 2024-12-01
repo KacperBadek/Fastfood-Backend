@@ -2,7 +2,7 @@ package com.example.tbkproject;
 
 import com.example.tbkproject.data.documents.TableDocument;
 import com.example.tbkproject.data.enums.ProductType;
-import com.example.tbkproject.data.documents.AddOn;
+import com.example.tbkproject.data.documents.support.AddOn;
 import com.example.tbkproject.data.documents.ProductDocument;
 import com.example.tbkproject.data.documents.UserDocument;
 import com.example.tbkproject.data.repositories.ProductRepository;

@@ -1,4 +1,4 @@
-package com.example.tbkproject.data.documents;
+package com.example.tbkproject.data.documents.support;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

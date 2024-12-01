@@ -1,6 +1,6 @@
 package com.example.tbkproject.service;
 
-import com.example.tbkproject.data.documents.OrderItem;
+import com.example.tbkproject.data.documents.support.OrderItem;
 import com.example.tbkproject.data.documents.TableDocument;
 import com.example.tbkproject.data.enums.DeliveryOption;
 import com.example.tbkproject.data.enums.OrderStatus;

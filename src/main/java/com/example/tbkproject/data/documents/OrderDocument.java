@@ -1,5 +1,6 @@
 package com.example.tbkproject.data.documents;
 
+import com.example.tbkproject.data.documents.support.OrderItem;
 import com.example.tbkproject.data.enums.DeliveryOption;
 import com.example.tbkproject.data.enums.OrderStatus;
 import lombok.Getter;

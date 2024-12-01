@@ -1,7 +1,7 @@
 package com.example.tbkproject.mapper.order.mappers;
 
 import com.example.tbkproject.data.documents.OrderDocument;
-import com.example.tbkproject.data.documents.OrderItem;
+import com.example.tbkproject.data.documents.support.OrderItem;
 import com.example.tbkproject.dto.order.dtos.CreateOrderDto;
 import com.example.tbkproject.mapper.AddOnMapper;
 
