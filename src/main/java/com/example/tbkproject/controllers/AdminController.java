@@ -17,7 +17,6 @@ public class AdminController {
 
     @GetMapping("/sales")
     public ResponseEntity<SalesReportDto> getSalesData() {
-        adminService.getSalesData();
         return ResponseEntity.ok(adminService.getSalesData());
     }
 

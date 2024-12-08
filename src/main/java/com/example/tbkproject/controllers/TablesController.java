@@ -14,7 +14,7 @@ public class TablesController {
     private final TableService tableService;
 
     @PutMapping("/{tableId}/orders")
-    public ResponseEntity<Void> setOrderOnTable(@PathVariable("tableId") String tableId, String orderId) {
+    public ResponseEntity<Void> setOrderOnTable(@PathVariable("tableId") String tableId, @RequestParam String orderId) {
         tableService.setOrderOnTable(tableId, orderId);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

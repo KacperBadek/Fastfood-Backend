@@ -4,6 +4,7 @@ import com.example.tbkproject.dto.AddOnDto;
 import com.example.tbkproject.dto.product.dtos.ProductDetailsDto;
 import com.example.tbkproject.dto.product.dtos.ProductDto;
 import com.example.tbkproject.service.ProductService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +26,7 @@ public class ProductsController {
     }
 
     @PutMapping("/{id}/customizastions")
-    public ResponseEntity<List<AddOnDto>> setProductAddons(@PathVariable String id, @RequestBody List<AddOnDto> addons) {
+    public ResponseEntity<List<AddOnDto>> setProductAddons(@PathVariable String id, @Valid @RequestBody List<AddOnDto> addons) {
         productService.setProductAddOns(id, addons);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
@@ -46,7 +47,7 @@ public class ProductsController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Void> addProduct(@RequestBody ProductDto productDto) {
+    public ResponseEntity<Void> addProduct(@Valid @RequestBody ProductDto productDto) {
         productService.addProduct(productDto);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
@@ -60,7 +61,7 @@ public class ProductsController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<Void> updateProduct(ProductDto productDto) {
+    public ResponseEntity<Void> updateProduct(@Valid @RequestBody ProductDto productDto) {
         productService.updateProduct(productDto);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

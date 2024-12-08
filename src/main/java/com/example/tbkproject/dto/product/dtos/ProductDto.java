@@ -2,10 +2,7 @@ package com.example.tbkproject.dto.product.dtos;
 
 import com.example.tbkproject.data.enums.ProductType;
 import com.example.tbkproject.dto.AddOnDto;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,21 +24,20 @@ public class ProductDto {
     private String description;
     @NotBlank
     private String image;
-    @NotBlank
+    @NotNull
     private ProductType type;
     @Positive
     @Min(0)
     private double price;
-    @NotBlank
     private boolean available;
-    @NotBlank
+    @NotEmpty
     private List<String> ingredients;
-    @NotBlank
+    @NotEmpty
     private List<String> allergens;
     @Positive
     @Min(0)
     private int calories;
-    @NotBlank
+    @NotEmpty
     private List<AddOnDto> addOns;
 
 }

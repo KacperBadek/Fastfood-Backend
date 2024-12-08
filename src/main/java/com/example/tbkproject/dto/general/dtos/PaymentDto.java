@@ -3,6 +3,7 @@ package com.example.tbkproject.dto.general.dtos;
 import com.example.tbkproject.data.enums.PaymentMethod;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,7 +18,7 @@ public class PaymentDto {
 
     @NotBlank
     private String orderId;
-    @NotBlank
+    @NotNull
     private PaymentMethod paymentMethod;
     @Positive
     @Min(0)

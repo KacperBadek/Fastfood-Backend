@@ -3,7 +3,6 @@ package com.example.tbkproject.controllers;
 import com.example.tbkproject.dto.UserDto;
 import com.example.tbkproject.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

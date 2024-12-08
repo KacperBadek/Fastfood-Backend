@@ -1,7 +1,6 @@
 package com.example.tbkproject.dto.order.dtos;
 
 import com.example.tbkproject.data.enums.DeliveryOption;
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,6 +13,6 @@ import jakarta.validation.constraints.NotNull;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DeliveryOptionDto {
-    @NotBlank(message = "Delivery option is required")
+    @NotNull(message = "Delivery option is required")
     private DeliveryOption deliveryOption;
 }
