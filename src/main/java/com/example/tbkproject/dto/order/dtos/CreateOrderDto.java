@@ -10,10 +10,10 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 public class CreateOrderDto {
 
     @NotBlank
@@ -25,9 +25,8 @@ public class CreateOrderDto {
     private double totalPrice;
     @NotBlank
     private DeliveryOption deliveryOption;
-    @NotBlank
-    @Size(min = 2, max = 100)
     private String deliveryAddress;
+    private Integer tableNumber;
     @NotBlank
     @Past(message = "Creation date must be in the past")
     private LocalDateTime orderTime;

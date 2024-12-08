@@ -14,7 +14,7 @@ public class TableDocument {
     @Id
     private String id;
     private String orderId;
-    private int tableNumber;
+    private Integer tableNumber;
 
    public TableDocument(int tableNumber) {
         this.tableNumber = tableNumber;

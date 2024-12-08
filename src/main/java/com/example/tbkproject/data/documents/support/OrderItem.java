@@ -12,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrderItem {
-    private String productId;
+    private String productName;
     private List<AddOn> selectedAddOns;
     private int quantity;
     private double price;

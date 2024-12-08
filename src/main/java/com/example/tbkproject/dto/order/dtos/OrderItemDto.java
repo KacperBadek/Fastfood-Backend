@@ -17,7 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 public class OrderItemDto {
     @NotBlank
-    private String productId;
+    private String productName;
     @NotBlank
     private List<AddOnDto> selectedAddOns;
     @Positive

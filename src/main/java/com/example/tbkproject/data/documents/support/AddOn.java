@@ -11,5 +11,14 @@ import lombok.Setter;
 @AllArgsConstructor
 public class AddOn {
     private String name;
+    private int quantity;
     private Double additionalPrice;
+
+    public AddOn(String name, Double additionalPrice) {
+        this.name = name;
+        this.quantity = 0;
+        this.additionalPrice = additionalPrice;
+    }
+
 }
+

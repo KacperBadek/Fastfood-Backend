@@ -5,7 +5,7 @@ import com.example.tbkproject.dto.order.dtos.OrderConfirmationDto;
 
 public class OrderConfirmationMapper {
 
-    public static OrderConfirmationDto toDto(OrderDocument order, int tableNumber) {
+    public static OrderConfirmationDto toDto(OrderDocument order, Integer tableNumber) {
         return new OrderConfirmationDto(
                 order.getOrderNumber(),
                 order.getStatus(),

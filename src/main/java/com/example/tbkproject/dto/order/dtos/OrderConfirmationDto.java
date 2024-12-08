@@ -28,12 +28,8 @@ public class OrderConfirmationDto {
     private double totalPrice;
     @NotBlank
     private DeliveryOption deliveryOption;
-    @NotBlank
-    @Size(min = 3, max = 100)
     private String deliveryAddress;
-    @Positive
-    @Min(1)
-    private int tableNumber;
+    private Integer tableNumber;
     @NotBlank
     private String estimatedTime;
 }

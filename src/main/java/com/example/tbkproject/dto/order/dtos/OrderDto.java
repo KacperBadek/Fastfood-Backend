@@ -31,8 +31,6 @@ public class OrderDto {
     private double totalPrice;
     @NotBlank
     private DeliveryOption deliveryOption;
-    @NotBlank
-    @Size(min = 3, max = 100)
     private String deliveryAddress;
     @NotBlank
     @Past(message = "Creation date must be in the past")

@@ -1,9 +1,7 @@
 package com.example.tbkproject.exceptions.excpetion.handlers;
 
 import com.example.tbkproject.controllers.ProductsController;
-import com.example.tbkproject.exceptions.exception.order.InvalidDeliveryOptionException;
-import com.example.tbkproject.exceptions.exception.order.OrderAlreadyPaidForException;
-import com.example.tbkproject.exceptions.exception.order.OrderNotFoundException;
+import com.example.tbkproject.exceptions.exception.order.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -26,5 +24,15 @@ public class OrderExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(OrderAlreadyPaidForException.class)
     public ResponseEntity<String> handleOrderAlreadyPaidForException(Exception ex) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(ItemInOrderMismatchException.class)
+    public ResponseEntity<String> handleItemInOrderMismatchException(Exception ex) {
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(AddOnInItemMismatchException.class)
+    public ResponseEntity<String> handleAddOnInItemMismatchException(Exception ex) {
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(ex.getMessage());
     }
 }

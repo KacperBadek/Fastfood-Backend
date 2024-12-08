@@ -13,7 +13,7 @@ public class CreateOrderMapper {
     public static OrderDocument toDocument(CreateOrderDto createOrderDto) {
         List<OrderItem> orderItems = createOrderDto.getItems().stream()
                 .map(itemDto -> new OrderItem(
-                        itemDto.getProductId(),
+                        itemDto.getProductName(),
                         itemDto.getSelectedAddOns().stream().map(AddOnMapper::toDocument).toList(),
                         itemDto.getQuantity(),
                         itemDto.getPrice()

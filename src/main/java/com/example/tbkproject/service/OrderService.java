@@ -1,13 +1,19 @@
 package com.example.tbkproject.service;
 
+import com.example.tbkproject.data.documents.ProductDocument;
+import com.example.tbkproject.data.documents.support.AddOn;
 import com.example.tbkproject.data.documents.support.OrderItem;
 import com.example.tbkproject.data.documents.TableDocument;
 import com.example.tbkproject.data.enums.DeliveryOption;
 import com.example.tbkproject.data.enums.OrderStatus;
 import com.example.tbkproject.data.documents.OrderDocument;
 import com.example.tbkproject.data.repositories.OrderRepository;
+import com.example.tbkproject.data.repositories.ProductRepository;
 import com.example.tbkproject.data.repositories.TableRepository;
+import com.example.tbkproject.dto.AddOnDto;
 import com.example.tbkproject.dto.order.dtos.*;
+import com.example.tbkproject.exceptions.exception.order.AddOnInItemMismatchException;
+import com.example.tbkproject.exceptions.exception.order.ItemInOrderMismatchException;
 import com.example.tbkproject.exceptions.exception.order.OrderAlreadyPaidForException;
 import com.example.tbkproject.exceptions.exception.order.OrderNotFoundException;
 import com.example.tbkproject.exceptions.exception.table.TableNotFoundException;
@@ -22,7 +28,9 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -30,13 +38,16 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
     private final TableRepository tableRepository;
+    private final ProductRepository productRepository;
+    private final TableService tableService;
+
 
     private OrderDocument findOrder(String id) {
         return orderRepository.findById(id).orElseThrow(() -> new OrderNotFoundException(id));
     }
 
-    private int getTableNumberByOrder(OrderDocument order) {
-        int tableNumber = -1;
+    private Integer getTableNumberByOrder(OrderDocument order) {
+        Integer tableNumber = null;
 
         if (order.getDeliveryOption() == DeliveryOption.DINE_IN) {
             TableDocument table = tableRepository.findByOrderId(order.getId())
@@ -54,6 +65,38 @@ public class OrderService {
         return orderRepository.findById(id).map(OrderMapper::toDto).orElseThrow(() -> new OrderNotFoundException(id));
     }
 
+    public void createOrder(CreateOrderDto createOrderDto) {
+        validateOrderItems(createOrderDto.getItems());
+
+        OrderDocument order = CreateOrderMapper.toDocument(createOrderDto);
+
+        order.setOrderNumber(generateOrderNumber());
+        order.setTotalPrice(countTotalPrice(createOrderDto.getItems()));
+        order.setStatus(OrderStatus.PENDING);
+        order.setEstimatedTime(countEstimatedTime(createOrderDto.getOrderTime(), createOrderDto.getDeliveryOption()));
+
+        orderRepository.save(order);
+
+        if (createOrderDto.getDeliveryOption() == DeliveryOption.DINE_IN && createOrderDto.getTableNumber() != null) {
+            tableService.setOrderOnTableByTableNumber(createOrderDto.getTableNumber(), order.getId());
+        }
+    }
+
+    public void deleteOrder(String id) {
+        OrderDocument order = findOrder(id);
+        orderRepository.delete(order);
+    }
+
+    public void cancelOrder(String id) {
+        OrderDocument order = findOrder(id);
+
+        if (order.getStatus() == OrderStatus.PENDING) {
+            order.setStatus(OrderStatus.CANCELLED);
+        } else {
+            throw new OrderAlreadyPaidForException(id);
+        }
+    }
+
     private synchronized int generateOrderNumber() {
         Optional<OrderDocument> lastOrder = orderRepository.findFirstByOrderByOrderNumberDesc();
 
@@ -63,6 +106,7 @@ public class OrderService {
 
         return lastOrder.get().getOrderNumber() + 1;
     }
+
 
     private String countEstimatedTime(LocalDateTime orderTime, DeliveryOption deliveryOption) {
         LocalDateTime estimatedTime = orderTime;
@@ -79,25 +123,58 @@ public class OrderService {
 
     private double countTotalPrice(List<OrderItemDto> orderItems) {
         return orderItems.stream()
-                .mapToDouble(item -> item.getPrice() * item.getQuantity())
+                .mapToDouble(item -> {
+                    double basePrice = item.getPrice() * item.getQuantity();
+
+                    double addOnsPrice = item.getSelectedAddOns().stream()
+                            .mapToDouble(addon -> addon.getAdditionalPrice() * addon.getQuantity())
+                            .sum() * item.getQuantity();
+
+                    return basePrice + addOnsPrice;
+                })
                 .sum();
     }
 
 
-    public void createOrder(CreateOrderDto createOrderDto) {
-        OrderDocument order = CreateOrderMapper.toDocument(createOrderDto);
+    private void validateOrderItems(List<OrderItemDto> orderItems) {
+        List<String> validProductNames = productRepository.findAll().stream()
+                .map(ProductDocument::getName)
+                .toList();
 
-        order.setOrderNumber(generateOrderNumber());
-        order.setTotalPrice(countTotalPrice(createOrderDto.getItems()));
-        order.setStatus(OrderStatus.PENDING);
-        order.setEstimatedTime(countEstimatedTime(createOrderDto.getOrderTime(), createOrderDto.getDeliveryOption()));
+        Map<String, ProductDocument> productsByName = productRepository.findAll().stream()
+                .collect(Collectors.toMap(ProductDocument::getName, product -> product));
 
-        orderRepository.save(order);
+        for (OrderItemDto item : orderItems) {
+            if (!validProductNames.contains(item.getProductName())) {
+                throw new ItemInOrderMismatchException(item.getProductName());
+            }
+
+            ProductDocument product = productsByName.get(item.getProductName());
+            if (product.getPrice() != item.getPrice()) {
+                throw new ItemInOrderMismatchException(item.getProductName());
+            }
+
+            validateAddOns(item.getSelectedAddOns(), product.getAddOns());
+        }
+
     }
 
-    public void deleteOrder(String id) {
-        OrderDocument order = findOrder(id);
-        orderRepository.delete(order);
+    private void validateAddOns(List<AddOnDto> selectedAddOns, List<AddOn> validAddOns) {
+        Map<String, Double> validAddOnsMap = validAddOns.stream()
+                .collect(Collectors.toMap(AddOn::getName, AddOn::getAdditionalPrice));
+
+        for (AddOnDto selectedAddOn : selectedAddOns) {
+            if (!validAddOnsMap.containsKey(selectedAddOn.getName())) {
+                throw new AddOnInItemMismatchException(selectedAddOn.getName());
+            }
+
+            Double expectedPrice = validAddOnsMap.get(selectedAddOn.getName());
+            if (!expectedPrice.equals(selectedAddOn.getAdditionalPrice())) {
+                throw new AddOnInItemMismatchException(selectedAddOn.getName());
+            }
+
+        }
+
     }
 
     public DeliveryOptionDto getDeliveryOptionFromOrder(String id) {
@@ -115,19 +192,10 @@ public class OrderService {
         return order.getEstimatedTime();
     }
 
-    public void cancelOrder(String id) {
-        OrderDocument order = findOrder(id);
-
-        if (order.getStatus() == OrderStatus.PENDING) {
-            order.setStatus(OrderStatus.CANCELLED);
-        } else {
-            throw new OrderAlreadyPaidForException(id);
-        }
-    }
 
     public OrderSummaryDto getOrderSummary(String id) {
         OrderDocument order = findOrder(id);
-        int tableNumber = getTableNumberByOrder(order);
+        Integer tableNumber = getTableNumberByOrder(order);
 
         return OrderSummaryMapper.toDto(order, tableNumber);
     }
@@ -136,7 +204,7 @@ public class OrderService {
         OrderDocument order = findOrder(id);
         List<OrderItem> items = dto.getItems().stream()
                 .map(itemDto -> new OrderItem(
-                        itemDto.getProductId(),
+                        itemDto.getProductName(),
                         itemDto.getSelectedAddOns().stream().map(AddOnMapper::toDocument).toList(),
                         itemDto.getQuantity(),
                         itemDto.getPrice()
@@ -158,7 +226,7 @@ public class OrderService {
 
     public OrderConfirmationDto getOrderConfirmation(String id) {
         OrderDocument order = findOrder(id);
-        int tableNumber = getTableNumberByOrder(order);
+        Integer tableNumber = getTableNumberByOrder(order);
 
         return OrderConfirmationMapper.toDto(order, tableNumber);
     }

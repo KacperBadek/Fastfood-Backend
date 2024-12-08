@@ -18,4 +18,9 @@ public class TableService {
         table.setOrderId(orderId);
     }
 
+    public void setOrderOnTableByTableNumber(Integer tableNumber, String orderId) {
+        TableDocument table = tableRepository.findByTableNumber(tableNumber).orElseThrow(TableNotFoundException::new);
+        table.setOrderId(orderId);
+    }
+
 }

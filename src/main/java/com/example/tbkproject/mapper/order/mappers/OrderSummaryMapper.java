@@ -9,11 +9,11 @@ import java.util.List;
 
 public class OrderSummaryMapper {
 
-    public static OrderSummaryDto toDto(OrderDocument order, int tableNumber) {
+    public static OrderSummaryDto toDto(OrderDocument order, Integer tableNumber) {
 
         List<OrderItemDto> items = order.getItems().stream()
                 .map(item -> new OrderItemDto(
-                        item.getProductId(),
+                        item.getProductName(),
                         item.getSelectedAddOns().stream().map(AddOnMapper::toDto).toList(),
                         item.getQuantity(),
                         item.getPrice()

@@ -17,7 +17,14 @@ public class AddOnDto {
     @NotBlank
     @Size(min = 3)
     private String name;
+    @NotBlank
+    @Positive
+    @Min(0)
+    private int quantity;
     @Positive
     @Min(0)
     private Double additionalPrice;
+
+
+
 }

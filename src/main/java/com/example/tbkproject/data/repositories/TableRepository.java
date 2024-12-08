@@ -10,5 +10,6 @@ import java.util.Optional;
 public interface TableRepository extends MongoRepository<TableDocument, String> {
 
     Optional<TableDocument> findByOrderId(String orderId);
+    Optional<TableDocument> findByTableNumber(Integer tableNumber);
 
 }
