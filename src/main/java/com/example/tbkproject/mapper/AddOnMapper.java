@@ -1,14 +1,14 @@
 package com.example.tbkproject.mapper;
 
-import com.example.tbkproject.data.documents.support.AddOn;
+import com.example.tbkproject.data.documents.AddOnDocument;
 import com.example.tbkproject.dto.AddOnDto;
 
 public class AddOnMapper {
-    public static AddOnDto toDto(AddOn addon) {
-        return new AddOnDto(addon.getName(), addon.getQuantity(), addon.getAdditionalPrice());
+    public static AddOnDto toDto(AddOnDocument addon) {
+        return new AddOnDto(addon.getName(), addon.getAdditionalPrice());
     }
 
-    public static AddOn toDocument(AddOnDto dto) {
-        return new AddOn(dto.getName(), dto.getQuantity(), dto.getAdditionalPrice());
+    public static AddOnDocument toDocument(AddOnDto dto) {
+        return new AddOnDocument(dto.getName(), dto.getAdditionalPrice());
     }
 }

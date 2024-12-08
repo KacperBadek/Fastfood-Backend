@@ -1,6 +1,6 @@
 package com.example.tbkproject.dto.order.dtos;
 
-import com.example.tbkproject.dto.AddOnDto;
+import com.example.tbkproject.data.documents.support.OrderItemAddOn;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
@@ -19,7 +19,7 @@ public class OrderItemDto {
     @NotBlank
     private String productName;
     @NotBlank
-    private List<AddOnDto> selectedAddOns;
+    private List<OrderItemAddOn> selectedAddOns;
     @Positive
     @Min(1)
     private int quantity;

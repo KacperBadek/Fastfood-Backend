@@ -2,9 +2,10 @@ package com.example.tbkproject;
 
 import com.example.tbkproject.data.documents.TableDocument;
 import com.example.tbkproject.data.enums.ProductType;
-import com.example.tbkproject.data.documents.support.AddOn;
+import com.example.tbkproject.data.documents.AddOnDocument;
 import com.example.tbkproject.data.documents.ProductDocument;
 import com.example.tbkproject.data.documents.UserDocument;
+import com.example.tbkproject.data.repositories.AddOnRepository;
 import com.example.tbkproject.data.repositories.ProductRepository;
 import com.example.tbkproject.data.repositories.TableRepository;
 import com.example.tbkproject.service.UserService;
@@ -22,6 +23,7 @@ import java.util.List;
 public class PopulateDb {
 
     private final ProductRepository productRepository;
+    private final AddOnRepository addOnRepository;
     private final TableRepository tableRepository;
     private final UserService userService;
 
@@ -31,17 +33,27 @@ public class PopulateDb {
         mongoTemplate.getDb().getCollection("productDocument").drop();
         mongoTemplate.getDb().getCollection("userDocument").drop();
         mongoTemplate.getDb().getCollection("tableDocument").drop();
+        mongoTemplate.getDb().getCollection("addOnDocument").drop();
+        mongoTemplate.getDb().getCollection("orderDocument").drop();
 
         return args -> {
+
+            AddOnDocument addon1 = new AddOnDocument("Mieso", 4.0);
+            AddOnDocument addon2 = new AddOnDocument("Ser", 3.0);
+            AddOnDocument addon3 = new AddOnDocument("Salata", 2.0);
+            AddOnDocument addon4 = new AddOnDocument("Ketchup", 1.0);
+            AddOnDocument addon5 = new AddOnDocument("Musztarda", 1.0);
+
             ProductDocument product1 = new ProductDocument("Cheeseburger", "Burger z serem", "", ProductType.BURGER, 6.99,
                     true, List.of("wołowina", "ser", "sałata"), List.of("laktoza"),
-                    550, List.of(new AddOn("Ser", 2.0), new AddOn("Mięso", 3.0)));
+                    550, List.of(addon1, addon2, addon3)
+            );
 
             ProductDocument product2 = new ProductDocument(
-                    "Frytki", "Crispy golden french fries.", "",
+                    "Frytki", "Solone kawałki ziemniaka na głębokim oleju", "",
                     ProductType.SNACK, 5.99, true,
                     List.of("ziemniaki", "sól", "olej"),
-                    List.of(), 300, List.of(new AddOn("Ketchup", 1.0), new AddOn("Majonez", 1.0))
+                    List.of(), 300, List.of(addon4, addon5)
             );
 
             ProductDocument product3 = new ProductDocument(
@@ -56,7 +68,7 @@ public class PopulateDb {
                     ProductType.SALAD, 7.99, true,
                     List.of("sałata", "parmezan", "kurczak", "sos caesar"),
                     List.of("laktoza"), 200,
-                    List.of(new AddOn("Parmezan", 1.5), new AddOn("Grzanki", 1.0))
+                    List.of(addon3)
             );
 
             ProductDocument product5 = new ProductDocument(
@@ -64,7 +76,7 @@ public class PopulateDb {
                     ProductType.DESERT, 4.99, true,
                     List.of("mleko", "cukier", "wanilia"),
                     List.of("laktoza"), 200,
-                    List.of(new AddOn("Bita śmietana", 1.0), new AddOn("Sos czekoladowy", 1.5))
+                    List.of()
             );
 
             ProductDocument product6 = new ProductDocument(
@@ -72,8 +84,9 @@ public class PopulateDb {
                     ProductType.MEAL, 20.99, true,
                     List.of("wołowina", "ser", "sałata", "pomidor", "bułka", "ziemniaki", "napój"),
                     List.of("laktoza", "gluten"), 1200,
-                    List.of(new AddOn("Extra Sauce", 1.0), new AddOn("Double Fries", 2.5))
+                    List.of(addon1, addon2, addon3, addon4, addon5)
             );
+
 
             TableDocument table1 = new TableDocument(1);
             TableDocument table2 = new TableDocument(2);
@@ -81,13 +94,12 @@ public class PopulateDb {
             TableDocument table4 = new TableDocument(4);
             TableDocument table5 = new TableDocument(5);
 
-
-
             UserDocument admin = new UserDocument("Admin", "admin@gmail.com", "123", true);
 
-
+            List<AddOnDocument> addOns = List.of(addon1, addon2, addon3, addon4, addon5);
             List<ProductDocument> products = List.of(product1, product2, product3, product4, product5, product6);
             List<TableDocument> tables = List.of(table1, table2, table3, table4, table5);
+            addOnRepository.saveAll(addOns);
             productRepository.saveAll(products);
             tableRepository.saveAll(tables);
             userService.createUser(admin);

@@ -1,4 +1,4 @@
-package com.example.tbkproject.dto.order.dtos;
+package com.example.tbkproject.dto.order.create.dtos;
 
 import com.example.tbkproject.data.enums.DeliveryOption;
 import jakarta.validation.constraints.*;
@@ -18,17 +18,13 @@ public class CreateOrderDto {
 
     @NotBlank
     private String sessionId;
-    @NotBlank
-    private List<OrderItemDto> items;
-    @Positive
-    @Min(0)
-    private double totalPrice;
-    @NotBlank
+    @NotEmpty
+    private List<CreateOrderItemDto> items;
+    @NotNull
     private DeliveryOption deliveryOption;
     private String deliveryAddress;
     private Integer tableNumber;
-    @NotBlank
+    @NotNull
     @Past(message = "Creation date must be in the past")
     private LocalDateTime orderTime;
-
 }

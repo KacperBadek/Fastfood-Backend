@@ -1,6 +1,5 @@
 package com.example.tbkproject.data.documents;
 
-import com.example.tbkproject.data.documents.support.AddOn;
 import com.example.tbkproject.data.enums.ProductType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,10 +27,10 @@ public class ProductDocument {
     private List<String> ingredients;
     private List<String> allergens;
     private int calories;
-    private List<AddOn> addOns;
+    private List<AddOnDocument> addOnDocuments;
 
     public ProductDocument(String name, String description, String image, ProductType type, double price, boolean available,
-                           List<String> ingredients, List<String> allergens, int calories, List<AddOn> addOns) {
+                           List<String> ingredients, List<String> allergens, int calories, List<AddOnDocument> addOnDocuments) {
         this.name = name;
         this.description = description;
         this.image = image;
@@ -41,7 +40,7 @@ public class ProductDocument {
         this.ingredients = ingredients;
         this.allergens = allergens;
         this.calories = calories;
-        this.addOns = addOns;
+        this.addOnDocuments = addOnDocuments;
     }
 }
 

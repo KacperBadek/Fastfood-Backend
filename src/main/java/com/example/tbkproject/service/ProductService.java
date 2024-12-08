@@ -52,12 +52,12 @@ public class ProductService {
     public List<AddOnDto> getProductAddOns(String id) {
         ProductDocument product = productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException(id));
 
-        return product.getAddOns().stream().map(AddOnMapper::toDto).toList();
+        return product.getAddOnDocuments().stream().map(AddOnMapper::toDto).toList();
     }
 
     public void setProductAddOns(String id, List<AddOnDto> addOns) {
         ProductDocument product = productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException(id));
-        product.setAddOns(addOns.stream().map(AddOnMapper::toDocument).toList());
+        product.setAddOnDocuments(addOns.stream().map(AddOnMapper::toDocument).toList());
     }
 
     public void updateProduct(ProductDto productDto) {

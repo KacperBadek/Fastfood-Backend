@@ -1,24 +1,18 @@
 package com.example.tbkproject.service;
 
-import com.example.tbkproject.data.documents.ProductDocument;
-import com.example.tbkproject.data.documents.support.AddOn;
 import com.example.tbkproject.data.documents.support.OrderItem;
 import com.example.tbkproject.data.documents.TableDocument;
 import com.example.tbkproject.data.enums.DeliveryOption;
 import com.example.tbkproject.data.enums.OrderStatus;
 import com.example.tbkproject.data.documents.OrderDocument;
 import com.example.tbkproject.data.repositories.OrderRepository;
-import com.example.tbkproject.data.repositories.ProductRepository;
 import com.example.tbkproject.data.repositories.TableRepository;
-import com.example.tbkproject.dto.AddOnDto;
+import com.example.tbkproject.dto.order.create.dtos.CreateOrderDto;
 import com.example.tbkproject.dto.order.dtos.*;
-import com.example.tbkproject.exceptions.exception.order.AddOnInItemMismatchException;
-import com.example.tbkproject.exceptions.exception.order.ItemInOrderMismatchException;
 import com.example.tbkproject.exceptions.exception.order.OrderAlreadyPaidForException;
 import com.example.tbkproject.exceptions.exception.order.OrderNotFoundException;
 import com.example.tbkproject.exceptions.exception.table.TableNotFoundException;
-import com.example.tbkproject.mapper.AddOnMapper;
-import com.example.tbkproject.mapper.order.mappers.CreateOrderMapper;
+import com.example.tbkproject.mapper.order.create.mappers.CreateOrderMapper;
 import com.example.tbkproject.mapper.order.mappers.OrderConfirmationMapper;
 import com.example.tbkproject.mapper.order.mappers.OrderMapper;
 import com.example.tbkproject.mapper.order.mappers.OrderSummaryMapper;
@@ -28,9 +22,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -38,8 +30,8 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
     private final TableRepository tableRepository;
-    private final ProductRepository productRepository;
     private final TableService tableService;
+    private final CreateOrderMapper mapper;
 
 
     private OrderDocument findOrder(String id) {
@@ -47,14 +39,12 @@ public class OrderService {
     }
 
     private Integer getTableNumberByOrder(OrderDocument order) {
-        Integer tableNumber = null;
-
         if (order.getDeliveryOption() == DeliveryOption.DINE_IN) {
             TableDocument table = tableRepository.findByOrderId(order.getId())
                     .orElseThrow(TableNotFoundException::new);
-            tableNumber = table.getTableNumber();
+            return table.getTableNumber();
         }
-        return tableNumber;
+        return null;
     }
 
     public List<OrderDto> getAllOrders() {
@@ -66,12 +56,9 @@ public class OrderService {
     }
 
     public void createOrder(CreateOrderDto createOrderDto) {
-        validateOrderItems(createOrderDto.getItems());
-
-        OrderDocument order = CreateOrderMapper.toDocument(createOrderDto);
+        OrderDocument order = mapper.toDocument(createOrderDto);
 
         order.setOrderNumber(generateOrderNumber());
-        order.setTotalPrice(countTotalPrice(createOrderDto.getItems()));
         order.setStatus(OrderStatus.PENDING);
         order.setEstimatedTime(countEstimatedTime(createOrderDto.getOrderTime(), createOrderDto.getDeliveryOption()));
 
@@ -121,62 +108,6 @@ public class OrderService {
         return estimatedTime.format(formatter);
     }
 
-    private double countTotalPrice(List<OrderItemDto> orderItems) {
-        return orderItems.stream()
-                .mapToDouble(item -> {
-                    double basePrice = item.getPrice() * item.getQuantity();
-
-                    double addOnsPrice = item.getSelectedAddOns().stream()
-                            .mapToDouble(addon -> addon.getAdditionalPrice() * addon.getQuantity())
-                            .sum() * item.getQuantity();
-
-                    return basePrice + addOnsPrice;
-                })
-                .sum();
-    }
-
-
-    private void validateOrderItems(List<OrderItemDto> orderItems) {
-        List<String> validProductNames = productRepository.findAll().stream()
-                .map(ProductDocument::getName)
-                .toList();
-
-        Map<String, ProductDocument> productsByName = productRepository.findAll().stream()
-                .collect(Collectors.toMap(ProductDocument::getName, product -> product));
-
-        for (OrderItemDto item : orderItems) {
-            if (!validProductNames.contains(item.getProductName())) {
-                throw new ItemInOrderMismatchException(item.getProductName());
-            }
-
-            ProductDocument product = productsByName.get(item.getProductName());
-            if (product.getPrice() != item.getPrice()) {
-                throw new ItemInOrderMismatchException(item.getProductName());
-            }
-
-            validateAddOns(item.getSelectedAddOns(), product.getAddOns());
-        }
-
-    }
-
-    private void validateAddOns(List<AddOnDto> selectedAddOns, List<AddOn> validAddOns) {
-        Map<String, Double> validAddOnsMap = validAddOns.stream()
-                .collect(Collectors.toMap(AddOn::getName, AddOn::getAdditionalPrice));
-
-        for (AddOnDto selectedAddOn : selectedAddOns) {
-            if (!validAddOnsMap.containsKey(selectedAddOn.getName())) {
-                throw new AddOnInItemMismatchException(selectedAddOn.getName());
-            }
-
-            Double expectedPrice = validAddOnsMap.get(selectedAddOn.getName());
-            if (!expectedPrice.equals(selectedAddOn.getAdditionalPrice())) {
-                throw new AddOnInItemMismatchException(selectedAddOn.getName());
-            }
-
-        }
-
-    }
-
     public DeliveryOptionDto getDeliveryOptionFromOrder(String id) {
         OrderDocument order = findOrder(id);
         return new DeliveryOptionDto(order.getDeliveryOption());
@@ -205,7 +136,7 @@ public class OrderService {
         List<OrderItem> items = dto.getItems().stream()
                 .map(itemDto -> new OrderItem(
                         itemDto.getProductName(),
-                        itemDto.getSelectedAddOns().stream().map(AddOnMapper::toDocument).toList(),
+                        itemDto.getSelectedAddOns(),
                         itemDto.getQuantity(),
                         itemDto.getPrice()
                 ))

@@ -14,7 +14,7 @@ public class OrderSummaryMapper {
         List<OrderItemDto> items = order.getItems().stream()
                 .map(item -> new OrderItemDto(
                         item.getProductName(),
-                        item.getSelectedAddOns().stream().map(AddOnMapper::toDto).toList(),
+                        item.getSelectedAddOns(),
                         item.getQuantity(),
                         item.getPrice()
                 ))

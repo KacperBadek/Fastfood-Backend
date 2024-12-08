@@ -1,4 +1,4 @@
-package com.example.tbkproject.dto;
+package com.example.tbkproject.dto.order.create.dtos;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -9,15 +9,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AddOnDto {
+@Getter
+@Setter
+public class CreateOrderAddOnDto {
     @NotBlank
     @Size(min = 3)
     private String name;
     @Positive
     @Min(0)
-    private Double additionalPrice;
+    private int quantity;
 }

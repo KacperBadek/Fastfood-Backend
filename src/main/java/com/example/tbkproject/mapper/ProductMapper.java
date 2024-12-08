@@ -15,7 +15,7 @@ public class ProductMapper {
                 productDocument.getIngredients(),
                 productDocument.getAllergens(),
                 productDocument.getCalories(),
-                productDocument.getAddOns().stream().map(AddOnMapper::toDto).toList()
+                productDocument.getAddOnDocuments().stream().map(AddOnMapper::toDto).toList()
         );
     }
 

@@ -1,24 +1,26 @@
-package com.example.tbkproject.data.documents.support;
+package com.example.tbkproject.data.documents;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
+@Document
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AddOn {
+public class AddOnDocument {
+    @Id
+    private String id;
     private String name;
-    private int quantity;
     private Double additionalPrice;
 
-    public AddOn(String name, Double additionalPrice) {
+    public AddOnDocument(String name, Double additionalPrice) {
         this.name = name;
-        this.quantity = 0;
         this.additionalPrice = additionalPrice;
     }
-
 }
 

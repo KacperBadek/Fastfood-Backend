@@ -16,7 +16,7 @@ public class OrderMapper {
         List<OrderItemDto> orderItemDtos = orderDocument.getItems().stream()
                 .map(item -> new OrderItemDto(
                         item.getProductName(),
-                        item.getSelectedAddOns().stream().map(AddOnMapper::toDto).toList(),
+                        item.getSelectedAddOns(),
                         item.getQuantity(),
                         item.getPrice()
                 ))
@@ -39,7 +39,7 @@ public class OrderMapper {
         List<OrderItem> orderItems = orderDto.getItems().stream()
                 .map(itemDto -> new OrderItem(
                         itemDto.getProductName(),
-                        itemDto.getSelectedAddOns().stream().map(AddOnMapper::toDocument).toList(),
+                        itemDto.getSelectedAddOns(),
                         itemDto.getQuantity(),
                         itemDto.getPrice()
                 ))

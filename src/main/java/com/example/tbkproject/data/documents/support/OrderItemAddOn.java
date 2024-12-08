@@ -5,15 +5,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
-@Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderItem {
-    private String productName;
-    private List<OrderItemAddOn> selectedAddOns;
+@Getter
+@Setter
+public class OrderItemAddOn {
+    private String name;
+    private Double additionalPrice;
     private int quantity;
-    private double price;
 }

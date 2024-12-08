@@ -25,14 +25,4 @@ public class OrderExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<String> handleOrderAlreadyPaidForException(Exception ex) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
     }
-
-    @ExceptionHandler(ItemInOrderMismatchException.class)
-    public ResponseEntity<String> handleItemInOrderMismatchException(Exception ex) {
-        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(ex.getMessage());
-    }
-
-    @ExceptionHandler(AddOnInItemMismatchException.class)
-    public ResponseEntity<String> handleAddOnInItemMismatchException(Exception ex) {
-        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(ex.getMessage());
-    }
 }

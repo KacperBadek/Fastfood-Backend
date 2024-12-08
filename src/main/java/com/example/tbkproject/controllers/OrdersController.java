@@ -1,7 +1,9 @@
 package com.example.tbkproject.controllers;
 
+import com.example.tbkproject.dto.order.create.dtos.CreateOrderDto;
 import com.example.tbkproject.dto.order.dtos.*;
 import com.example.tbkproject.service.OrderService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +24,7 @@ public class OrdersController {
     }
 
     @PutMapping("/{id}/delivery-options")
-    public ResponseEntity<Void> setDeliveryOptionForOrder(@PathVariable String id, DeliveryOptionDto deliveryOption) {
+    public ResponseEntity<Void> setDeliveryOptionForOrder(@PathVariable String id, @Valid @RequestBody DeliveryOptionDto deliveryOption) {
         orderService.setDeliveryOptionForOrder(id, deliveryOption);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
@@ -34,7 +36,7 @@ public class OrdersController {
     }
 
     @PutMapping("/{id}/summary")
-    public ResponseEntity<Void> modifyOrderSummary(@PathVariable String id, @RequestBody OrderSummaryEditDto orderSummary) {
+    public ResponseEntity<Void> modifyOrderSummary(@PathVariable String id, @Valid @RequestBody OrderSummaryEditDto orderSummary) {
         orderService.modifyOrderSummary(id, orderSummary);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
@@ -66,8 +68,8 @@ public class OrdersController {
         return ResponseEntity.ok(orderService.getOrderByOrderNumber(id));
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<CreateOrderDto> createOrder(CreateOrderDto createOrderDto) {
+    @PostMapping("/create")
+    public ResponseEntity<CreateOrderDto> createOrder(@Valid @RequestBody CreateOrderDto createOrderDto) {
         orderService.createOrder(createOrderDto);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
