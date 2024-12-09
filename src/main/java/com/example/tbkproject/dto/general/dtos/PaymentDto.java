@@ -20,8 +20,4 @@ public class PaymentDto {
     private String orderId;
     @NotNull
     private PaymentMethod paymentMethod;
-    @Positive
-    @Min(0)
-    private double totalPrice;
-
 }

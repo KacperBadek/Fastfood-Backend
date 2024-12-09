@@ -8,7 +8,6 @@ import com.example.tbkproject.data.repositories.PaymentRepository;
 import com.example.tbkproject.dto.general.dtos.MenusDto;
 import com.example.tbkproject.dto.general.dtos.PaymentDto;
 import com.example.tbkproject.dto.product.dtos.ProductDto;
-import com.example.tbkproject.exceptions.exception.general.TotalPriceMismatchException;
 import com.example.tbkproject.exceptions.exception.order.OrderNotFoundException;
 import com.example.tbkproject.mapper.PaymentMapper;
 import jakarta.servlet.http.HttpServletRequest;
@@ -41,17 +40,8 @@ public class GeneralService {
     public void createOrderPayment(PaymentDto dto) {
         OrderDocument order = orderRepository.findById(dto.getOrderId()).orElseThrow(() -> new OrderNotFoundException(dto.getOrderId()));
 
-        if (compareTotalPrice(dto.getTotalPrice(), order.getTotalPrice())) {
-            PaymentDocument paymentDocument = new PaymentDocument(dto.getOrderId(), dto.getPaymentMethod(), dto.getTotalPrice());
-            paymentRepository.save(paymentDocument);
-        } else {
-            throw new TotalPriceMismatchException();
-        }
-
-    }
-
-    private boolean compareTotalPrice(double paymentPrice, double orderPrice) {
-        return paymentPrice == orderPrice;
+        PaymentDocument paymentDocument = new PaymentDocument(dto.getOrderId(), dto.getPaymentMethod(), order.getTotalPrice());
+        paymentRepository.save(paymentDocument);
     }
 
     public String startSession(HttpServletRequest request) {
