@@ -5,6 +5,7 @@ import com.example.tbkproject.data.documents.PaymentDocument;
 import com.example.tbkproject.data.enums.ProductType;
 import com.example.tbkproject.data.repositories.OrderRepository;
 import com.example.tbkproject.data.repositories.PaymentRepository;
+import com.example.tbkproject.dto.general.dtos.CreatePaymentDto;
 import com.example.tbkproject.dto.general.dtos.MenusDto;
 import com.example.tbkproject.dto.general.dtos.PaymentDto;
 import com.example.tbkproject.dto.product.dtos.ProductDto;
@@ -37,7 +38,7 @@ public class GeneralService {
         return paymentRepository.findAll().stream().map(PaymentMapper::toDto).toList();
     }
 
-    public void createOrderPayment(PaymentDto dto) {
+    public void createOrderPayment(CreatePaymentDto dto) {
         OrderDocument order = orderRepository.findById(dto.getOrderId()).orElseThrow(() -> new OrderNotFoundException(dto.getOrderId()));
 
         PaymentDocument paymentDocument = new PaymentDocument(dto.getOrderId(), dto.getPaymentMethod(), order.getTotalPrice());

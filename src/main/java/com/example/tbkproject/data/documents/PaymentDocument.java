@@ -16,11 +16,11 @@ public class PaymentDocument {
     private String id;
     private String orderId;
     private PaymentMethod paymentMethod;
-    private double totalPrice;
+    private Double amount;
 
-    public PaymentDocument(String orderId, PaymentMethod paymentMethod, double totalPrice) {
+    public PaymentDocument(String orderId, PaymentMethod paymentMethod, Double amount) {
         this.orderId = orderId;
         this.paymentMethod = paymentMethod;
-        this.totalPrice = totalPrice;
+        this.amount = amount;
     }
 }

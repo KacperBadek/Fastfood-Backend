@@ -1,5 +1,6 @@
 package com.example.tbkproject.controllers;
 
+import com.example.tbkproject.dto.general.dtos.CreatePaymentDto;
 import com.example.tbkproject.dto.general.dtos.MenusDto;
 import com.example.tbkproject.dto.general.dtos.PaymentDto;
 import com.example.tbkproject.service.GeneralService;
@@ -30,8 +31,8 @@ public class GeneralController {
     }
 
     @PostMapping("/payments")
-    public ResponseEntity<Void> payments(@Valid @RequestBody PaymentDto paymentDto) {
-        generalService.createOrderPayment(paymentDto);
+    public ResponseEntity<Void> payments(@Valid @RequestBody CreatePaymentDto createPaymentDto) {
+        generalService.createOrderPayment(createPaymentDto);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }

@@ -1,6 +1,8 @@
 package com.example.tbkproject.dto.general.dtos;
 
 import com.example.tbkproject.data.enums.PaymentMethod;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,8 +12,9 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PaymentDto {
+public class CreatePaymentDto {
+    @NotBlank
     private String orderId;
+    @NotNull
     private PaymentMethod paymentMethod;
-    private Double amount;
 }
