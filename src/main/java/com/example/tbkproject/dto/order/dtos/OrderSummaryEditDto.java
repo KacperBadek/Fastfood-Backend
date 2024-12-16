@@ -1,6 +1,7 @@
 package com.example.tbkproject.dto.order.dtos;
 
 import com.example.tbkproject.data.enums.DeliveryOption;
+import com.example.tbkproject.dto.order.create.dtos.CreateOrderItemDto;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -17,7 +18,7 @@ import java.util.List;
 public class OrderSummaryEditDto {
 
     @NotEmpty
-    private List<OrderItemDto> items;
+    private List<CreateOrderItemDto> items;
     @NotNull
     private DeliveryOption deliveryOption;
     private String deliveryAddress;

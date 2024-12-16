@@ -13,14 +13,27 @@ public class TableService {
     private final TableRepository tableRepository;
 
     public void setOrderOnTable(String tableId, String orderId) {
+        tableRepository.findByOrderId(orderId).ifPresent(existingTable -> {
+            existingTable.setOrderId(null);
+            tableRepository.save(existingTable);
+        });
+
         TableDocument table = tableRepository.findById(tableId).orElseThrow(TableNotFoundException::new);
 
         table.setOrderId(orderId);
+        tableRepository.save(table);
     }
 
     public void setOrderOnTableByTableNumber(Integer tableNumber, String orderId) {
+        tableRepository.findByOrderId(orderId).ifPresent(existingTable -> {
+            existingTable.setOrderId(null);
+            tableRepository.save(existingTable);
+        });
+
         TableDocument table = tableRepository.findByTableNumber(tableNumber).orElseThrow(TableNotFoundException::new);
+
         table.setOrderId(orderId);
+        tableRepository.save(table);
     }
 
 }

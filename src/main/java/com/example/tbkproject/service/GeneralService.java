@@ -2,6 +2,7 @@ package com.example.tbkproject.service;
 
 import com.example.tbkproject.data.documents.OrderDocument;
 import com.example.tbkproject.data.documents.PaymentDocument;
+import com.example.tbkproject.data.enums.OrderStatus;
 import com.example.tbkproject.data.enums.ProductType;
 import com.example.tbkproject.data.repositories.OrderRepository;
 import com.example.tbkproject.data.repositories.PaymentRepository;
@@ -40,9 +41,11 @@ public class GeneralService {
 
     public void createOrderPayment(CreatePaymentDto dto) {
         OrderDocument order = orderRepository.findById(dto.getOrderId()).orElseThrow(() -> new OrderNotFoundException(dto.getOrderId()));
-
         PaymentDocument paymentDocument = new PaymentDocument(dto.getOrderId(), dto.getPaymentMethod(), order.getTotalPrice());
+
         paymentRepository.save(paymentDocument);
+        order.setStatus(OrderStatus.PAID);
+        orderRepository.save(order);
     }
 
     public String startSession(HttpServletRequest request) {

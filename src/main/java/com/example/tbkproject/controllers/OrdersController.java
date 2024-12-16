@@ -64,8 +64,8 @@ public class OrdersController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<OrderDto> getOrderByOrderNumber(@PathVariable String id) {
-        return ResponseEntity.ok(orderService.getOrderByOrderNumber(id));
+    public ResponseEntity<OrderDto> getOrderById(@PathVariable String id) {
+        return ResponseEntity.ok(orderService.getOrderById(id));
     }
 
     @PostMapping("/create")
