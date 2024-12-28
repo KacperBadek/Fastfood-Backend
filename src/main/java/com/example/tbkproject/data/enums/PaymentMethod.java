@@ -1,6 +1,7 @@
 package com.example.tbkproject.data.enums;
 
 public enum PaymentMethod {
-    KARTA,
-    GOTÓWKA
+    CREDIT_CARD,
+    CASH,
+    BLIK
 }
