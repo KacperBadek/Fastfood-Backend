@@ -38,42 +38,42 @@ public class PopulateDb {
 
         return args -> {
 
-            AddOnDocument addon1 = new AddOnDocument("Mieso", 4.0);
-            AddOnDocument addon2 = new AddOnDocument("Ser", 3.0);
-            AddOnDocument addon3 = new AddOnDocument("Salata", 2.0);
-            AddOnDocument addon4 = new AddOnDocument("Ketchup", 1.0);
-            AddOnDocument addon5 = new AddOnDocument("Musztarda", 1.0);
+            AddOnDocument addon1 = new AddOnDocument("Mieso", 4.0, 1);
+            AddOnDocument addon2 = new AddOnDocument("Ser", 3.0, 1);
+            AddOnDocument addon3 = new AddOnDocument("Ogórek", 2.0, 1);
+            AddOnDocument addon4 = new AddOnDocument("Ketchup", 1.0, 0);
+            AddOnDocument addon5 = new AddOnDocument("Musztarda", 1.0, 0);
 
             ProductDocument product1 = new ProductDocument("Cheeseburger", "Burger z serem", "https://cdn.mcdonalds.pl/uploads/20220922160220/cheeseburger.png",
-                    ProductType.BURGER, 6.99, true, List.of("wołowina", "ser", "sałata"), List.of("laktoza"),
+                    ProductType.BURGER, 12.00, true, List.of("wołowina", "ser", "sałata"), List.of("laktoza"),
                     550, List.of(addon1, addon2, addon3)
             );
 
             ProductDocument product2 = new ProductDocument(
                     "Frytki", "Solone kawałki ziemniaka na głębokim oleju", "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/ec545603-cf4e-48e0-936d-5376ea12fdc0/dfk5m5y-3ca07d66-1b26-4e00-9367-93add799d352.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcL2VjNTQ1NjAzLWNmNGUtNDhlMC05MzZkLTUzNzZlYTEyZmRjMFwvZGZrNW01eS0zY2EwN2Q2Ni0xYjI2LTRlMDAtOTM2Ny05M2FkZDc5OWQzNTIucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.V8p2MCryEv24FLsesaGeiZsbRQQAd-v2WvYiBTNVnqY",
-                    ProductType.SNACK, 5.99, true,
+                    ProductType.SNACK, 7.00, true,
                     List.of("ziemniaki", "sól", "olej"),
                     List.of(), 300, List.of(addon4, addon5)
             );
 
             ProductDocument product3 = new ProductDocument(
                     "Coca Cola", "Refreshing cold drink.", "https://icons.veryicon.com/png/Food%20%26%20Drinks/Coke%20%26%20Pepsi%20Can/Coca%20Cola%20Can.png",
-                    ProductType.DRINK, 3.99, true,
+                    ProductType.DRINK, 5.00, true,
                     List.of("woda", "cukier", "barwnik"),
                     List.of(), 150, List.of()
             );
 
             ProductDocument product4 = new ProductDocument(
                     "Caesar Salad", "Light Caesar salad with fresh veggies.", "https://cache-backend-mcd.mcdonaldscupones.com/media/image/product$kMXWhRwj/200/200/original?country=tt",
-                    ProductType.SALAD, 7.99, true,
+                    ProductType.SALAD, 9.00, true,
                     List.of("sałata", "parmezan", "kurczak", "sos caesar"),
                     List.of("laktoza"), 200,
-                    List.of(addon3)
+                    List.of()
             );
 
             ProductDocument product5 = new ProductDocument(
                     "Lody waniliowe", "Creamy vanilla ice cream with a rich flavor.", "https://www.pngkey.com/png/full/32-322082_ice-cream-cones-mcdonalds-vanilla-ice-cream-cone.png",
-                    ProductType.DESERT, 4.99, true,
+                    ProductType.DESERT, 6.00, true,
                     List.of("mleko", "cukier", "wanilia"),
                     List.of("laktoza"), 200,
                     List.of()
@@ -81,7 +81,7 @@ public class PopulateDb {
 
             ProductDocument product6 = new ProductDocument(
                     "Zestaw", "A combo meal with a burger, fries, cola, and ice cream.", "https://wallpapers.com/images/hd/mc-donalds-meal-combo-set-be71491v243lfu2x.png",
-                    ProductType.MEAL, 20.99, true,
+                    ProductType.MEAL, 25.00, true,
                     List.of("wołowina", "ser", "sałata", "pomidor", "bułka", "ziemniaki", "napój"),
                     List.of("laktoza", "gluten"), 1200,
                     List.of(addon1, addon2, addon3, addon4, addon5)
