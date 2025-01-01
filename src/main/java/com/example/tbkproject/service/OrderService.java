@@ -70,7 +70,8 @@ public class OrderService {
         return addOns.stream()
                 .map(addOnDto -> {
                     double additionalPrice = addOnService.getAddOnPriceByName(addOnDto.getName());
-                    return CreateOrderAddOnMapper.toOrderItemAddOn(addOnDto.getName(), addOnDto.getQuantity(), additionalPrice);
+                    int defaultQuantity = addOnService.getAddOnDefaultQuantityByName(addOnDto.getName());
+                    return CreateOrderAddOnMapper.toOrderItemAddOn(addOnDto.getName(), addOnDto.getQuantity(), additionalPrice, defaultQuantity);
                 })
                 .toList();
     }

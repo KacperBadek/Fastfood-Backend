@@ -11,9 +11,14 @@ public class AddOnService {
 
     private final AddOnRepository addOnRepository;
 
-    public Double getAddOnPriceByName(String name){
+    public Double getAddOnPriceByName(String name) {
         var addOn = addOnRepository.findByName(name).orElseThrow(() -> new AddOnNotFoundException(name));
         return addOn.getAdditionalPrice();
+    }
+
+    public int getAddOnDefaultQuantityByName(String name) {
+        var addOn = addOnRepository.findByName(name).orElseThrow(() -> new AddOnNotFoundException(name));
+        return addOn.getDefaultQuantity();
     }
 
 }

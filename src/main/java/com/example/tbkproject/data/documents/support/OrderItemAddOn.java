@@ -13,4 +13,5 @@ public class OrderItemAddOn {
     private String name;
     private Double additionalPrice;
     private int quantity;
+    private int defaultQuantity;
 }
