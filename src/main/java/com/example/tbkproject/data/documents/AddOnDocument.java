@@ -17,12 +17,12 @@ public class AddOnDocument {
     private String id;
     private String name;
     private Double additionalPrice;
-    private int quantity;
+    private int defaultQuantity;
 
-    public AddOnDocument(String name, Double additionalPrice, int quantity) {
+    public AddOnDocument(String name, Double additionalPrice, int defaultQuantity) {
         this.name = name;
         this.additionalPrice = additionalPrice;
-        this.quantity = quantity;
+        this.defaultQuantity = defaultQuantity;
     }
 }
 

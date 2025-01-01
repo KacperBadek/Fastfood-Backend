@@ -18,5 +18,5 @@ public class AddOnDto {
     @Positive
     @Min(0)
     private Double additionalPrice;
-    private int quantity;
+    private int defaultQuantity;
 }
