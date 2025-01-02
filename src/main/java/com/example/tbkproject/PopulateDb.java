@@ -35,6 +35,7 @@ public class PopulateDb {
         mongoTemplate.getDb().getCollection("tableDocument").drop();
         mongoTemplate.getDb().getCollection("addOnDocument").drop();
         mongoTemplate.getDb().getCollection("orderDocument").drop();
+        mongoTemplate.getDb().getCollection("paymentDocument").drop();
 
         return args -> {
 

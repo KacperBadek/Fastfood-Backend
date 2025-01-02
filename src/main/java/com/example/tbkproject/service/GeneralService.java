@@ -10,7 +10,7 @@ import com.example.tbkproject.dto.general.dtos.CreatePaymentDto;
 import com.example.tbkproject.dto.general.dtos.MenusDto;
 import com.example.tbkproject.dto.general.dtos.PaymentDto;
 import com.example.tbkproject.dto.product.dtos.ProductDto;
-import com.example.tbkproject.exceptions.exception.order.OrderNotFoundException;
+import com.example.tbkproject.exceptions.exception.order.OrderWithSessionIdNotFoundException;
 import com.example.tbkproject.mapper.PaymentMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -40,8 +40,8 @@ public class GeneralService {
     }
 
     public void createOrderPayment(CreatePaymentDto dto) {
-        OrderDocument order = orderRepository.findById(dto.getOrderId()).orElseThrow(() -> new OrderNotFoundException(dto.getOrderId()));
-        PaymentDocument paymentDocument = new PaymentDocument(dto.getOrderId(), dto.getPaymentMethod(), order.getTotalPrice());
+        OrderDocument order = orderRepository.findBySessionId(dto.getSessionId()).orElseThrow(() -> new OrderWithSessionIdNotFoundException(dto.getSessionId()));
+        PaymentDocument paymentDocument = new PaymentDocument(dto.getSessionId(), dto.getPaymentMethod(), order.getTotalPrice());
 
         paymentRepository.save(paymentDocument);
         order.setStatus(OrderStatus.PAID);
@@ -67,7 +67,7 @@ public class GeneralService {
         if (session != null) {
             return session.getId();
         } else {
-            return "Brak istniejącej sesji";
+            return "No existing session.";
         }
 
     }

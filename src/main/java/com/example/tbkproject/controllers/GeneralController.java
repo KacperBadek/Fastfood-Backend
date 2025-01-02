@@ -37,18 +37,18 @@ public class GeneralController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @PostMapping("/sessions/start")
+    @PostMapping("/session/start")
     public ResponseEntity<String> startSession(HttpServletRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(generalService.startSession(request));
     }
 
-    @PostMapping("/sessions/end")
+    @PostMapping("/session/end")
     public ResponseEntity<Void> endSession(HttpServletRequest request) {
         generalService.endSession(request);
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/sessions")
+    @GetMapping("/session")
     public ResponseEntity<String> getSessionInfo(HttpServletRequest request) {
         return ResponseEntity.ok(generalService.getSessionInfo(request));
     }

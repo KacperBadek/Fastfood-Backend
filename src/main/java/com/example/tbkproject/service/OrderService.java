@@ -14,13 +14,16 @@ import com.example.tbkproject.dto.order.create.dtos.CreateOrderItemDto;
 import com.example.tbkproject.dto.order.dtos.*;
 import com.example.tbkproject.exceptions.exception.order.OrderAlreadyPaidForException;
 import com.example.tbkproject.exceptions.exception.order.OrderNotFoundException;
+import com.example.tbkproject.exceptions.exception.order.OrderWithSessionIdNotFoundException;
 import com.example.tbkproject.exceptions.exception.table.TableNotFoundException;
 import com.example.tbkproject.mapper.order.create.mappers.CreateOrderAddOnMapper;
 import com.example.tbkproject.mapper.order.create.mappers.CreateOrderMapper;
 import com.example.tbkproject.mapper.order.mappers.OrderConfirmationMapper;
 import com.example.tbkproject.mapper.order.mappers.OrderMapper;
 import com.example.tbkproject.mapper.order.mappers.OrderSummaryMapper;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.web.authentication.session.SessionAuthenticationException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -37,10 +40,15 @@ public class OrderService {
     private final TableService tableService;
     private final AddOnService addOnService;
     private final ProductService productService;
+    private final GeneralService generalService;
 
 
-    private OrderDocument findOrder(String id) {
+    private OrderDocument findOrderById(String id) {
         return orderRepository.findById(id).orElseThrow(() -> new OrderNotFoundException(id));
+    }
+
+    private OrderDocument findOrderBySessionId(String sessionId) {
+        return orderRepository.findBySessionId(sessionId).orElseThrow(() -> new OrderWithSessionIdNotFoundException(sessionId));
     }
 
     private Integer getTableNumberByOrder(OrderDocument order) {
@@ -88,7 +96,12 @@ public class OrderService {
                 .toList();
     }
 
-    public void createOrder(CreateOrderDto dto) {
+    public void createOrder(CreateOrderDto dto, HttpServletRequest request) {
+        String currentSessionId = generalService.getSessionInfo(request);
+        if (!dto.getSessionId().equals(currentSessionId)) {
+            throw new SessionAuthenticationException("Wrong session");
+        }
+
         List<OrderItem> orderItems = getItemList(dto.getItems());
 
         double totalPrice = orderItems.stream()
@@ -112,20 +125,27 @@ public class OrderService {
     }
 
     public void deleteOrder(String id) {
-        OrderDocument order = findOrder(id);
+        OrderDocument order = findOrderById(id);
         orderRepository.delete(order);
     }
 
-    public void cancelOrder(String id) {
-        OrderDocument order = findOrder(id);
+    public void cancelOrder(String sessionId, HttpServletRequest request) {
+
+        String currentSessionId = generalService.getSessionInfo(request);
+        if (!sessionId.equals(currentSessionId)) {
+            throw new SessionAuthenticationException("Wrong session");
+        }
+
+        OrderDocument order = findOrderBySessionId(sessionId);
 
         if (order.getStatus() == OrderStatus.PENDING) {
             order.setStatus(OrderStatus.CANCELLED);
             orderRepository.save(order);
         } else {
-            throw new OrderAlreadyPaidForException(id);
+            throw new OrderAlreadyPaidForException(sessionId);
         }
     }
+
 
     private synchronized int generateOrderNumber() {
         Optional<OrderDocument> lastOrder = orderRepository.findFirstByOrderByOrderNumberDesc();
@@ -150,31 +170,31 @@ public class OrderService {
 
 
     public DeliveryOptionDto getDeliveryOptionFromOrder(String id) {
-        OrderDocument order = findOrder(id);
+        OrderDocument order = findOrderById(id);
         return new DeliveryOptionDto(order.getDeliveryOption());
     }
 
     public void setDeliveryOptionForOrder(String id, DeliveryOptionDto deliveryOption) {
-        OrderDocument order = findOrder(id);
+        OrderDocument order = findOrderById(id);
         order.setDeliveryOption(deliveryOption.getDeliveryOption());
         orderRepository.save(order);
     }
 
     public String getOrderEstimatedTime(String id) {
-        OrderDocument order = findOrder(id);
+        OrderDocument order = findOrderById(id);
         return order.getEstimatedTime();
     }
 
 
     public OrderSummaryDto getOrderSummary(String id) {
-        OrderDocument order = findOrder(id);
+        OrderDocument order = findOrderById(id);
         Integer tableNumber = getTableNumberByOrder(order);
 
         return OrderSummaryMapper.toDto(order, tableNumber);
     }
 
     public void modifyOrderSummary(String id, OrderSummaryEditDto dto) {
-        OrderDocument order = findOrder(id);
+        OrderDocument order = findOrderById(id);
         List<OrderItem> updatedItems = getItemList(dto.getItems());
 
         double totalPrice = updatedItems.stream()
@@ -193,8 +213,13 @@ public class OrderService {
         }
     }
 
-    public OrderConfirmationDto getOrderConfirmation(String id) {
-        OrderDocument order = findOrder(id);
+    public OrderConfirmationDto getOrderConfirmation(String sessionId, HttpServletRequest request) {
+        String currentSessionId = generalService.getSessionInfo(request);
+        if (!sessionId.equals(currentSessionId)) {
+            throw new SessionAuthenticationException("Wrong session");
+        }
+
+        OrderDocument order = findOrderBySessionId(sessionId);
         Integer tableNumber = getTableNumberByOrder(order);
 
         return OrderConfirmationMapper.toDto(order, tableNumber);

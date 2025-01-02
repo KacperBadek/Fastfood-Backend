@@ -14,7 +14,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class CreatePaymentDto {
     @NotBlank
-    private String orderId;
+    private String sessionId;
     @NotNull
     private PaymentMethod paymentMethod;
 }

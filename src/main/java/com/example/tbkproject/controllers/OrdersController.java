@@ -3,6 +3,7 @@ package com.example.tbkproject.controllers;
 import com.example.tbkproject.dto.order.create.dtos.CreateOrderDto;
 import com.example.tbkproject.dto.order.dtos.*;
 import com.example.tbkproject.service.OrderService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -42,14 +43,14 @@ public class OrdersController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @GetMapping("/{id}/confirm")
-    public ResponseEntity<OrderConfirmationDto> getOrderConfirmation(@PathVariable String id) {
-        return ResponseEntity.ok(orderService.getOrderConfirmation(id));
+    @GetMapping("/{sessionId}/confirm")
+    public ResponseEntity<OrderConfirmationDto> getOrderConfirmation(@PathVariable String sessionId, HttpServletRequest request) {
+        return ResponseEntity.ok(orderService.getOrderConfirmation(sessionId, request));
     }
 
-    @PutMapping("/{id}/cancel")
-    public ResponseEntity<Void> cancelOrder(@PathVariable String id) {
-        orderService.cancelOrder(id);
+    @PutMapping("/{sessionId}/cancel")
+    public ResponseEntity<Void> cancelOrder(@PathVariable String sessionId, HttpServletRequest request) {
+        orderService.cancelOrder(sessionId, request);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
@@ -69,8 +70,8 @@ public class OrdersController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<CreateOrderDto> createOrder(@Valid @RequestBody CreateOrderDto createOrderDto) {
-        orderService.createOrder(createOrderDto);
+    public ResponseEntity<CreateOrderDto> createOrder(@Valid @RequestBody CreateOrderDto createOrderDto, HttpServletRequest request) {
+        orderService.createOrder(createOrderDto, request);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }

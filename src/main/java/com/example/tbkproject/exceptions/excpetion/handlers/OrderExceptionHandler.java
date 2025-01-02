@@ -16,6 +16,11 @@ public class OrderExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
 
+    @ExceptionHandler(OrderWithSessionIdNotFoundException.class)
+    public ResponseEntity<String> handleOrderWithSessionIdNotFoundException(Exception ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+
     @ExceptionHandler(InvalidDeliveryOptionException.class)
     public ResponseEntity<String> handleInvalidDeliveryOptionException(Exception ex) {
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(ex.getMessage());

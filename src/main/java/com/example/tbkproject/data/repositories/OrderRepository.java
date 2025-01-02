@@ -9,9 +9,6 @@ import java.util.Optional;
 @Repository
 public interface OrderRepository extends MongoRepository<OrderDocument, String> {
 
-    Optional<OrderDocument> findByOrderNumber(int orderNumber);
-
     Optional<OrderDocument> findFirstByOrderByOrderNumberDesc();
-
-
+    Optional<OrderDocument> findBySessionId(String sessionId);
 }
