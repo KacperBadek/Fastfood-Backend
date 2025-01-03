@@ -14,12 +14,12 @@ import org.springframework.data.annotation.Id;
 public class PaymentDocument {
     @Id
     private String id;
-    private String sessionId;
+    private String orderId;
     private PaymentMethod paymentMethod;
     private Double amount;
 
-    public PaymentDocument(String sessionId, PaymentMethod paymentMethod, Double amount) {
-        this.sessionId = sessionId;
+    public PaymentDocument(String orderId, PaymentMethod paymentMethod, Double amount) {
+        this.orderId = orderId;
         this.paymentMethod = paymentMethod;
         this.amount = amount;
     }

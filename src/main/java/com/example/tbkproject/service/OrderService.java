@@ -23,7 +23,6 @@ import com.example.tbkproject.mapper.order.mappers.OrderMapper;
 import com.example.tbkproject.mapper.order.mappers.OrderSummaryMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.web.authentication.session.SessionAuthenticationException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -98,9 +97,6 @@ public class OrderService {
 
     public void createOrder(CreateOrderDto dto, HttpServletRequest request) {
         String currentSessionId = generalService.getSessionInfo(request);
-        if (!dto.getSessionId().equals(currentSessionId)) {
-            throw new SessionAuthenticationException("Wrong session");
-        }
 
         List<OrderItem> orderItems = getItemList(dto.getItems());
 
@@ -109,7 +105,7 @@ public class OrderService {
                 .sum();
 
         OrderDocument order = new OrderDocument();
-        order.setSessionId(dto.getSessionId());
+        order.setSessionId(currentSessionId);
         order.setItems(orderItems);
         order.setTotalPrice(totalPrice);
         order.setOrderNumber(generateOrderNumber());
@@ -129,20 +125,16 @@ public class OrderService {
         orderRepository.delete(order);
     }
 
-    public void cancelOrder(String sessionId, HttpServletRequest request) {
+    public void cancelOrder(HttpServletRequest request) {
 
         String currentSessionId = generalService.getSessionInfo(request);
-        if (!sessionId.equals(currentSessionId)) {
-            throw new SessionAuthenticationException("Wrong session");
-        }
-
-        OrderDocument order = findOrderBySessionId(sessionId);
+        OrderDocument order = findOrderBySessionId(currentSessionId);
 
         if (order.getStatus() == OrderStatus.PENDING) {
             order.setStatus(OrderStatus.CANCELLED);
             orderRepository.save(order);
         } else {
-            throw new OrderAlreadyPaidForException(sessionId);
+            throw new OrderAlreadyPaidForException(currentSessionId);
         }
     }
 
@@ -213,13 +205,10 @@ public class OrderService {
         }
     }
 
-    public OrderConfirmationDto getOrderConfirmation(String sessionId, HttpServletRequest request) {
+    public OrderConfirmationDto getOrderConfirmation(HttpServletRequest request) {
         String currentSessionId = generalService.getSessionInfo(request);
-        if (!sessionId.equals(currentSessionId)) {
-            throw new SessionAuthenticationException("Wrong session");
-        }
 
-        OrderDocument order = findOrderBySessionId(sessionId);
+        OrderDocument order = findOrderBySessionId(currentSessionId);
         Integer tableNumber = getTableNumberByOrder(order);
 
         return OrderConfirmationMapper.toDto(order, tableNumber);

@@ -16,8 +16,6 @@ import java.util.List;
 @Setter
 public class CreateOrderDto {
 
-    @NotBlank
-    private String sessionId;
     @NotEmpty
     private List<CreateOrderItemDto> items;
     @NotNull

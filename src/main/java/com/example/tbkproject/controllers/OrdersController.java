@@ -43,15 +43,22 @@ public class OrdersController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @GetMapping("/{sessionId}/confirm")
-    public ResponseEntity<OrderConfirmationDto> getOrderConfirmation(@PathVariable String sessionId, HttpServletRequest request) {
-        return ResponseEntity.ok(orderService.getOrderConfirmation(sessionId, request));
+    @GetMapping("/confirm")
+    public ResponseEntity<OrderConfirmationDto> getOrderConfirmation(HttpServletRequest request) {
+        return ResponseEntity.ok(orderService.getOrderConfirmation(request));
     }
 
-    @PutMapping("/{sessionId}/cancel")
-    public ResponseEntity<Void> cancelOrder(@PathVariable String sessionId, HttpServletRequest request) {
-        orderService.cancelOrder(sessionId, request);
+    @PutMapping("/cancel")
+    public ResponseEntity<Void> cancelOrder(HttpServletRequest request) {
+        orderService.cancelOrder(request);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @PostMapping("/create")
+    public ResponseEntity<CreateOrderDto> createOrder(@Valid @RequestBody CreateOrderDto createOrderDto, HttpServletRequest request) {
+        orderService.createOrder(createOrderDto, request);
+
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @GetMapping("/{id}/estimated-time")
@@ -67,13 +74,6 @@ public class OrdersController {
     @GetMapping("/{id}")
     public ResponseEntity<OrderDto> getOrderById(@PathVariable String id) {
         return ResponseEntity.ok(orderService.getOrderById(id));
-    }
-
-    @PostMapping("/create")
-    public ResponseEntity<CreateOrderDto> createOrder(@Valid @RequestBody CreateOrderDto createOrderDto, HttpServletRequest request) {
-        orderService.createOrder(createOrderDto, request);
-
-        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @DeleteMapping("/{id}/delete")

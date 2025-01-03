@@ -31,8 +31,8 @@ public class GeneralController {
     }
 
     @PostMapping("/payments")
-    public ResponseEntity<Void> payments(@Valid @RequestBody CreatePaymentDto createPaymentDto) {
-        generalService.createOrderPayment(createPaymentDto);
+    public ResponseEntity<Void> payments(@Valid @RequestBody CreatePaymentDto createPaymentDto, HttpServletRequest request) {
+        generalService.createOrderPayment(createPaymentDto, request);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }

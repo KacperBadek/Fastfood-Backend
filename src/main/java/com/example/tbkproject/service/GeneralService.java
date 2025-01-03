@@ -3,6 +3,7 @@ package com.example.tbkproject.service;
 import com.example.tbkproject.data.documents.OrderDocument;
 import com.example.tbkproject.data.documents.PaymentDocument;
 import com.example.tbkproject.data.enums.OrderStatus;
+import com.example.tbkproject.data.enums.PaymentMethod;
 import com.example.tbkproject.data.enums.ProductType;
 import com.example.tbkproject.data.repositories.OrderRepository;
 import com.example.tbkproject.data.repositories.PaymentRepository;
@@ -39,13 +40,16 @@ public class GeneralService {
         return paymentRepository.findAll().stream().map(PaymentMapper::toDto).toList();
     }
 
-    public void createOrderPayment(CreatePaymentDto dto) {
-        OrderDocument order = orderRepository.findBySessionId(dto.getSessionId()).orElseThrow(() -> new OrderWithSessionIdNotFoundException(dto.getSessionId()));
-        PaymentDocument paymentDocument = new PaymentDocument(dto.getSessionId(), dto.getPaymentMethod(), order.getTotalPrice());
+    public void createOrderPayment(CreatePaymentDto dto, HttpServletRequest request) {
+        String currentSessionId = getSessionInfo(request);
+        OrderDocument order = orderRepository.findBySessionId(currentSessionId).orElseThrow(() -> new OrderWithSessionIdNotFoundException(currentSessionId));
+        PaymentDocument paymentDocument = new PaymentDocument(order.getId(), dto.getPaymentMethod(), order.getTotalPrice());
 
         paymentRepository.save(paymentDocument);
-        order.setStatus(OrderStatus.PAID);
-        orderRepository.save(order);
+        if (!dto.getPaymentMethod().equals(PaymentMethod.CASH)) {
+            order.setStatus(OrderStatus.PAID);
+            orderRepository.save(order);
+        }
     }
 
     public String startSession(HttpServletRequest request) {
