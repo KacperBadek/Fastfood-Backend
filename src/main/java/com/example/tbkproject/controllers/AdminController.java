@@ -2,6 +2,7 @@ package com.example.tbkproject.controllers;
 
 import com.example.tbkproject.dto.SalesReportDto;
 import com.example.tbkproject.service.AdminService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,8 +17,8 @@ public class AdminController {
     private final AdminService adminService;
 
     @GetMapping("/sales")
-    public ResponseEntity<SalesReportDto> getSalesData() {
-        return ResponseEntity.ok(adminService.getSalesData());
+    public ResponseEntity<SalesReportDto> getSalesData(HttpServletRequest request) {
+        return ResponseEntity.ok(adminService.getSalesData(request));
     }
 
 }

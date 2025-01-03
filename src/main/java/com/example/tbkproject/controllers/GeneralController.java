@@ -38,8 +38,9 @@ public class GeneralController {
     }
 
     @PostMapping("/session/start")
-    public ResponseEntity<String> startSession(HttpServletRequest request) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(generalService.startSession(request));
+    public ResponseEntity<Void> startSession(HttpServletRequest request) {
+        generalService.startSession(request);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PostMapping("/session/end")

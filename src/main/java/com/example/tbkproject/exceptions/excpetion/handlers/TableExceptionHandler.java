@@ -1,5 +1,6 @@
 package com.example.tbkproject.exceptions.excpetion.handlers;
 
+import com.example.tbkproject.controllers.TablesController;
 import com.example.tbkproject.exceptions.exception.table.TableNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -7,7 +8,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-@ControllerAdvice(assignableTypes = TableExceptionHandler.class)
+@ControllerAdvice(assignableTypes = TablesController.class)
 public class TableExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(TableNotFoundException.class)

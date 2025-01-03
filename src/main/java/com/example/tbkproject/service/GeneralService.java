@@ -52,9 +52,21 @@ public class GeneralService {
         }
     }
 
-    public String startSession(HttpServletRequest request) {
+    public void startAdminSession(HttpServletRequest request) {
         HttpSession session = request.getSession(true);
-        return session.getId();
+        session.setAttribute("role", "ROLE_ADMIN");
+    }
+
+    public void endAdminSession(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if (session != null && "ROLE_ADMIN".equals(session.getAttribute("role"))) {
+            session.invalidate();
+        }
+    }
+
+    public void startSession(HttpServletRequest request) {
+        HttpSession session = request.getSession(true);
+        session.setAttribute("role", "ROLE_USER");
     }
 
     public void endSession(HttpServletRequest request) {
@@ -63,6 +75,11 @@ public class GeneralService {
         if (session != null) {
             session.invalidate();
         }
+    }
+
+    public boolean checkIfAdminSession(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        return session != null && session.getAttribute("role").equals("ROLE_ADMIN");
     }
 
     public String getSessionInfo(HttpServletRequest request) {
