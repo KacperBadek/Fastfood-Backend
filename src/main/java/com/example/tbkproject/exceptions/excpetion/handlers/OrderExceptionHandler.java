@@ -30,4 +30,9 @@ public class OrderExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<String> handleOrderAlreadyPaidForException(Exception ex) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
     }
+
+    @ExceptionHandler(OrderWithSessionAlreadyExistsException.class)
+    public ResponseEntity<String> handleOrderWithSessionAlreadyExistsException(Exception ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+    }
 }

@@ -59,12 +59,4 @@ public class ProductsController {
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
-
-    @PutMapping("/update")
-    public ResponseEntity<Void> updateProduct(@Valid @RequestBody ProductDto productDto) {
-        productService.updateProduct(productDto);
-
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-    }
-
 }

@@ -14,6 +14,7 @@ import com.example.tbkproject.dto.order.create.dtos.CreateOrderItemDto;
 import com.example.tbkproject.dto.order.dtos.*;
 import com.example.tbkproject.exceptions.exception.order.OrderAlreadyPaidForException;
 import com.example.tbkproject.exceptions.exception.order.OrderNotFoundException;
+import com.example.tbkproject.exceptions.exception.order.OrderWithSessionAlreadyExistsException;
 import com.example.tbkproject.exceptions.exception.order.OrderWithSessionIdNotFoundException;
 import com.example.tbkproject.exceptions.exception.table.TableNotFoundException;
 import com.example.tbkproject.mapper.order.create.mappers.CreateOrderAddOnMapper;
@@ -97,6 +98,10 @@ public class OrderService {
 
     public void createOrder(CreateOrderDto dto, HttpServletRequest request) {
         String currentSessionId = generalService.getSessionInfo(request);
+
+        if (orderRepository.findBySessionId(currentSessionId).isPresent()) {
+            throw new OrderWithSessionAlreadyExistsException();
+        }
 
         List<OrderItem> orderItems = getItemList(dto.getItems());
 

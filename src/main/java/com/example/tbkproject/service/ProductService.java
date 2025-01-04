@@ -59,9 +59,4 @@ public class ProductService {
         ProductDocument product = productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException(id));
         product.setAddOnDocuments(addOns.stream().map(AddOnMapper::toDocument).toList());
     }
-
-    public void updateProduct(ProductDto productDto) {
-
-    }
-
 }

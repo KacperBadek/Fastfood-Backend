@@ -11,6 +11,7 @@ import com.example.tbkproject.dto.general.dtos.CreatePaymentDto;
 import com.example.tbkproject.dto.general.dtos.MenusDto;
 import com.example.tbkproject.dto.general.dtos.PaymentDto;
 import com.example.tbkproject.dto.product.dtos.ProductDto;
+import com.example.tbkproject.exceptions.exception.general.PaymentAlreadyExistsException;
 import com.example.tbkproject.exceptions.exception.order.OrderWithSessionIdNotFoundException;
 import com.example.tbkproject.mapper.PaymentMapper;
 import jakarta.servlet.http.HttpServletRequest;
@@ -43,8 +44,12 @@ public class GeneralService {
     public void createOrderPayment(CreatePaymentDto dto, HttpServletRequest request) {
         String currentSessionId = getSessionInfo(request);
         OrderDocument order = orderRepository.findBySessionId(currentSessionId).orElseThrow(() -> new OrderWithSessionIdNotFoundException(currentSessionId));
-        PaymentDocument paymentDocument = new PaymentDocument(order.getId(), dto.getPaymentMethod(), order.getTotalPrice());
 
+        if (paymentRepository.findByOrderId(order.getId()).isPresent()) {
+            throw new PaymentAlreadyExistsException();
+        }
+
+        PaymentDocument paymentDocument = new PaymentDocument(order.getId(), dto.getPaymentMethod(), order.getTotalPrice());
         paymentRepository.save(paymentDocument);
         if (!dto.getPaymentMethod().equals(PaymentMethod.CASH)) {
             order.setStatus(OrderStatus.PAID);
