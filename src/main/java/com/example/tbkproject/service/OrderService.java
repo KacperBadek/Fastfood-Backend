@@ -24,6 +24,7 @@ import com.example.tbkproject.mapper.order.mappers.OrderMapper;
 import com.example.tbkproject.mapper.order.mappers.OrderSummaryMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.web.authentication.session.SessionAuthenticationException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -100,7 +101,7 @@ public class OrderService {
         String currentSessionId = generalService.getSessionInfo(request);
 
         if (orderRepository.findBySessionId(currentSessionId).isPresent()) {
-            throw new OrderWithSessionAlreadyExistsException();
+            throw new SessionAuthenticationException("Invalid Session");
         }
 
         List<OrderItem> orderItems = getItemList(dto.getItems());

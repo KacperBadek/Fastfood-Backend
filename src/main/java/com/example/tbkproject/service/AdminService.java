@@ -36,7 +36,7 @@ public class AdminService {
 
             return new SalesReportDto(totalOrders, totalRevenue, ordersByStatus, ordersByDeliveryOption);
         } else {
-            throw new SessionAuthenticationException("FORBIDDEN");
+            throw new SessionAuthenticationException("Invalid Session");
         }
     }
 }
