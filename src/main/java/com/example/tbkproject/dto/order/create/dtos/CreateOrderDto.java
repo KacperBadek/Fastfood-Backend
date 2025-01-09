@@ -20,6 +20,7 @@ public class CreateOrderDto {
     private List<CreateOrderItemDto> items;
     @NotNull
     private DeliveryOption deliveryOption;
+    @NotNull
     private String deliveryAddress;
     private Integer tableNumber;
     @NotNull

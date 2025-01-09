@@ -35,4 +35,9 @@ public class OrderExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<String> handleOrderWithSessionAlreadyExistsException(Exception ex) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
     }
+
+    @ExceptionHandler(InvalidDataException.class)
+    public ResponseEntity<String> handleInvalidData(Exception ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
 }

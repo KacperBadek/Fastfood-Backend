@@ -12,9 +12,9 @@ import com.example.tbkproject.dto.order.create.dtos.CreateOrderAddOnDto;
 import com.example.tbkproject.dto.order.create.dtos.CreateOrderDto;
 import com.example.tbkproject.dto.order.create.dtos.CreateOrderItemDto;
 import com.example.tbkproject.dto.order.dtos.*;
+import com.example.tbkproject.exceptions.exception.order.InvalidDataException;
 import com.example.tbkproject.exceptions.exception.order.OrderAlreadyPaidForException;
 import com.example.tbkproject.exceptions.exception.order.OrderNotFoundException;
-import com.example.tbkproject.exceptions.exception.order.OrderWithSessionAlreadyExistsException;
 import com.example.tbkproject.exceptions.exception.order.OrderWithSessionIdNotFoundException;
 import com.example.tbkproject.exceptions.exception.table.TableNotFoundException;
 import com.example.tbkproject.mapper.order.create.mappers.CreateOrderAddOnMapper;
@@ -61,6 +61,24 @@ public class OrderService {
         return null;
     }
 
+    private boolean isDataValid(Integer tableNumber, DeliveryOption deliveryOption, String Address) {
+        if (deliveryOption == DeliveryOption.DINE_IN) {
+            return tableNumber != null && tableRepository.findByTableNumber(tableNumber).isPresent();
+        } else if (deliveryOption == DeliveryOption.DELIVERY) {
+            return !Address.isEmpty();
+        }
+        return true;
+    }
+
+    private String checkSession(HttpServletRequest request) {
+        String currentSessionId = generalService.getSessionInfo(request);
+
+        if (orderRepository.findBySessionId(currentSessionId).isPresent()) {
+            throw new SessionAuthenticationException("Invalid Session");
+        }
+        return currentSessionId;
+    }
+
     public List<OrderDto> getAllOrders() {
         return orderRepository.findAll().stream().map(OrderMapper::toDto).toList();
     }
@@ -69,9 +87,9 @@ public class OrderService {
         return orderRepository.findById(id).map(OrderMapper::toDto).orElseThrow(() -> new OrderNotFoundException(id));
     }
 
-    private void handleDineInOrder(CreateOrderDto dto, OrderDocument order) {
-        if (dto.getDeliveryOption() == DeliveryOption.DINE_IN && dto.getTableNumber() != null) {
-            tableService.setOrderOnTableByTableNumber(dto.getTableNumber(), order.getId());
+    private void handleDineInOrder(Integer tableNumber, OrderDocument order) {
+        if (order.getDeliveryOption() == DeliveryOption.DINE_IN) {
+            tableService.setOrderOnTableByTableNumber(tableNumber, order.getId());
         }
     }
 
@@ -98,32 +116,32 @@ public class OrderService {
     }
 
     public void createOrder(CreateOrderDto dto, HttpServletRequest request) {
-        String currentSessionId = generalService.getSessionInfo(request);
+        if (isDataValid(dto.getTableNumber(), dto.getDeliveryOption(), dto.getDeliveryAddress())) {
+            List<OrderItem> orderItems = getItemList(dto.getItems());
 
-        if (orderRepository.findBySessionId(currentSessionId).isPresent()) {
-            throw new SessionAuthenticationException("Invalid Session");
+            double totalPrice = orderItems.stream()
+                    .mapToDouble(orderItem -> orderItem.getPrice() * orderItem.getQuantity())
+                    .sum();
+
+            OrderDocument order = new OrderDocument();
+            order.setSessionId(checkSession(request));
+            order.setItems(orderItems);
+            order.setTotalPrice(totalPrice);
+            order.setOrderNumber(generateOrderNumber());
+            order.setStatus(OrderStatus.PENDING);
+            order.setDeliveryOption(dto.getDeliveryOption());
+            if (dto.getDeliveryOption() == DeliveryOption.DELIVERY) {
+                order.setDeliveryAddress(dto.getDeliveryAddress());
+            }
+            order.setOrderTime(dto.getOrderTime());
+            order.setEstimatedTime(countEstimatedTime(dto.getOrderTime(), dto.getDeliveryOption()));
+
+            orderRepository.save(order);
+            handleDineInOrder(dto.getTableNumber(), order);
+        } else {
+            throw new InvalidDataException();
         }
 
-        List<OrderItem> orderItems = getItemList(dto.getItems());
-
-        double totalPrice = orderItems.stream()
-                .mapToDouble(orderItem -> orderItem.getPrice() * orderItem.getQuantity())
-                .sum();
-
-        OrderDocument order = new OrderDocument();
-        order.setSessionId(currentSessionId);
-        order.setItems(orderItems);
-        order.setTotalPrice(totalPrice);
-        order.setOrderNumber(generateOrderNumber());
-        order.setStatus(OrderStatus.PENDING);
-        order.setDeliveryOption(dto.getDeliveryOption());
-        order.setDeliveryAddress(dto.getDeliveryAddress());
-        order.setOrderTime(dto.getOrderTime());
-        order.setEstimatedTime(countEstimatedTime(dto.getOrderTime(), dto.getDeliveryOption()));
-
-        orderRepository.save(order);
-
-        handleDineInOrder(dto, order);
     }
 
     public void deleteOrder(String id) {
@@ -131,16 +149,14 @@ public class OrderService {
         orderRepository.delete(order);
     }
 
-    public void cancelOrder(HttpServletRequest request) {
-
-        String currentSessionId = generalService.getSessionInfo(request);
-        OrderDocument order = findOrderBySessionId(currentSessionId);
+    public void cancelOrder(String id) {
+        OrderDocument order = findOrderById(id);
 
         if (order.getStatus() == OrderStatus.PENDING) {
             order.setStatus(OrderStatus.CANCELLED);
             orderRepository.save(order);
         } else {
-            throw new OrderAlreadyPaidForException(currentSessionId);
+            throw new OrderAlreadyPaidForException(id);
         }
     }
 
@@ -193,21 +209,26 @@ public class OrderService {
 
     public void modifyOrderSummary(String id, OrderSummaryEditDto dto) {
         OrderDocument order = findOrderById(id);
-        List<OrderItem> updatedItems = getItemList(dto.getItems());
 
-        double totalPrice = updatedItems.stream()
-                .mapToDouble(orderItem -> orderItem.getPrice() * orderItem.getQuantity())
-                .sum();
+        if (isDataValid(dto.getTableNumber(), dto.getDeliveryOption(), dto.getDeliveryAddress())) {
+            List<OrderItem> updatedItems = getItemList(dto.getItems());
 
-        order.setItems(updatedItems);
-        order.setTotalPrice(totalPrice);
-        order.setDeliveryOption(dto.getDeliveryOption());
-        order.setDeliveryAddress(dto.getDeliveryAddress());
+            double totalPrice = updatedItems.stream()
+                    .mapToDouble(orderItem -> orderItem.getPrice() * orderItem.getQuantity())
+                    .sum();
 
-        orderRepository.save(order);
+            order.setItems(updatedItems);
+            order.setTotalPrice(totalPrice);
+            order.setDeliveryOption(dto.getDeliveryOption());
+            if (dto.getDeliveryOption() == DeliveryOption.DELIVERY) {
+                order.setDeliveryAddress(dto.getDeliveryAddress());
+            }
+            order.setEstimatedTime(countEstimatedTime(order.getOrderTime(), dto.getDeliveryOption()));
 
-        if (order.getDeliveryOption() == DeliveryOption.DINE_IN && dto.getTableNumber() != null) {
-            tableService.setOrderOnTableByTableNumber(dto.getTableNumber(), order.getId());
+            orderRepository.save(order);
+            handleDineInOrder(dto.getTableNumber(), order);
+        } else {
+            throw new InvalidDataException();
         }
     }
 
