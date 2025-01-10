@@ -1,0 +1,61 @@
+POST http://localhost:8080/orders/create
+Content-Type: application/json
+
+{
+  "items": [
+    {
+      "productName": "Cheeseburger",
+      "selectedAddOns": [
+        {
+          "name": "Cheese",
+          "quantity": 3.3121
+        }
+      ],
+      "quantity": 2.5
+    },
+    {
+      "productName": "Coca Cola",
+      "selectedAddOns": [],
+      "quantity": 3
+    }
+  ],
+  "deliveryOption": "DINE_IN",
+  "deliveryAddress": "",
+  "tableNumber": 0,
+  "orderTime": "2024-12-08T14:30:00"
+}
+
+###
+PUT http://localhost:8080/orders/id/cancel
+Content-Type: application/json
+
+###
+PUT http://localhost:8080/orders/id/summary
+Content-Type: application/json
+
+{
+  "items": [
+    {
+      "productName": "Cheeseburger",
+      "selectedAddOns": [
+        {
+          "name": "Cheese",
+          "quantity": 3.3121
+        }
+      ],
+      "quantity": 2.5
+    },
+    {
+      "productName": "Coca Cola",
+      "selectedAddOns": [],
+      "quantity": 2
+    }
+  ],
+  "deliveryOption": "DELIVERY",
+  "deliveryAddress": "",
+  "tableNumber": 3
+}
+
+###
+POST http://localhost:8080/session/start
+Content-Type: application/json

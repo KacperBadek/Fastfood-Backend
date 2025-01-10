@@ -21,6 +21,7 @@ public class OrderSummaryEditDto {
     private List<CreateOrderItemDto> items;
     @NotNull
     private DeliveryOption deliveryOption;
+    @NotNull
     private String deliveryAddress;
     private Integer tableNumber;
 }
